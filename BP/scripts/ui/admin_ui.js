@@ -12,17 +12,17 @@ export class AdminUI {
 
     openMenu(player) {
         new ActionFormData()
-            .title('§d§lQuest System §ev3.0 §a(Admin)')
-            .body('§2Control Panel')
-            .button('§aCreate Quest', 'textures/items/book_writable')
-            .button('§bManage Quests', 'textures/items/book_written')
-            .button('§dQuest Chains', 'textures/items/chain')
-            .button('§6Manage Exchange', 'textures/items/gold_ingot')
-            .button('§eAdmin Guide', 'textures/items/book_normal')
-            .button('§3Leaderboard', 'textures/items/spyglass')
-            .button('§5Admin Stats', 'textures/items/clock_item')
-            .button('§cReset My Data', 'textures/ui/refresh')
-            .button('§8Player Mode', 'textures/items/iron_helmet')
+            .title({ translate: 'ads.ui.admin.main.title' })
+            .body({ translate: 'ads.ui.admin.main.body' })
+            .button({ translate: 'ads.ui.admin.main.btn_create' }, 'textures/items/book_writable')
+            .button({ translate: 'ads.ui.admin.main.btn_manage' }, 'textures/items/book_written')
+            .button({ translate: 'ads.ui.admin.main.btn_chains' }, 'textures/items/chain')
+            .button({ translate: 'ads.ui.admin.main.btn_shop' }, 'textures/items/gold_ingot')
+            .button({ translate: 'ads.ui.admin.main.btn_guide' }, 'textures/items/book_normal')
+            .button({ translate: 'ads.ui.admin.main.btn_leaderboard' }, 'textures/items/spyglass')
+            .button({ translate: 'ads.ui.admin.main.btn_stats' }, 'textures/items/clock_item')
+            .button({ translate: 'ads.ui.admin.main.btn_reset' }, 'textures/ui/refresh')
+            .button({ translate: 'ads.ui.admin.main.btn_player_mode' }, 'textures/items/iron_helmet')
             .show(player).then(r => {
                 if (r.canceled) return;
                 system.run(() => {
@@ -41,7 +41,7 @@ export class AdminUI {
                                 const key = `${CONFIG.DB_KEY_PLAYERS}_${id}`;
                                 world.setDynamicProperty(key, undefined);
                             } catch (e) { }
-                            player.sendMessage("§cData Reset!");
+                            player.sendMessage({ translate: 'ads.ui.admin.main.data_reset' });
                             break;
                         case 8: this.router.openPlayerLog(player); break;
                     }
@@ -51,31 +51,33 @@ export class AdminUI {
 
     uiCreateQuest(player, editTask = null) {
         const allTasks = Array.from(this.db.tasks.values());
-        const prereqOpts = ['None', ...allTasks.map(t => t.name)];
+        const prereqOpts = ['None'];
+        allTasks.forEach(t => prereqOpts.push(t.name));
+        
         new ModalFormData()
-            .title(editTask ? '§e§lEdit Quest' : '§a§lCreate New Quest')
-            .textField('Quest Name', 'e.g. Explorer Task', { defaultValue: editTask?.name || '' })
-            .textField('Description', 'Story text here...', { defaultValue: editTask?.desc || '' })
-            .dropdown('Category', Object.values(CATEGORIES), { defaultValueIndex: editTask ? Math.max(0, Object.values(CATEGORIES).indexOf(editTask.category)) : 0 })
-            .dropdown('Type', Object.values(TYPES), { defaultValueIndex: editTask ? Math.max(0, Object.values(TYPES).indexOf(editTask.type)) : 0 })
-            .textField('Target ID / Coords', 'minecraft:zombie OR 100,64,100', { defaultValue: editTask?.targetRaw || (typeof editTask?.target === 'string' ? editTask.target : '') })
-            .slider('Required Amount', 1, 100, { valueStep: 1, defaultValue: editTask?.req || 1 })
-            .dropdown('Prerequisite', prereqOpts, { defaultValueIndex: editTask?.prereq ? allTasks.findIndex(t => t.id === editTask.prereq) + 1 : 0 })
-            .textField('Incentive Commands (separate with ;)', '/give @s diamond 1', { defaultValue: editTask?.rewards?.commands?.join(';') || editTask?.rewardCmd || '' })
-            .textField('Incentive Display Text', 'e.g. 1x Diamond', { defaultValue: editTask?.rewardTxt || '' })
-            .slider('Quest Points', 1, 500, { valueStep: 1, defaultValue: editTask?.points || CONFIG.DEFAULT_QUEST_POINTS })
-            .toggle('Repeatable', { defaultValue: editTask?.repeatable || false })
-            .slider('Cooldown (seconds)', 0, 3600, { valueStep: 30, defaultValue: editTask?.cooldownSec || CONFIG.DEFAULT_COOLDOWN })
-            .slider('Time Limit (minutes, 0=none)', 0, 1440, { valueStep: 5, defaultValue: editTask?.deadline ? Math.round((editTask.deadline - Date.now()) / 60000) : 0 })
-            .slider('First-Time Bonus Points', 0, 200, { valueStep: 5, defaultValue: editTask?.rewards?.firstTimeBonus || 0 })
-            .textField('Random Incentive Pool (cmds, ;sep)', 'optional', { defaultValue: editTask?.rewards?.pool?.join(';') || '' })
+            .title({ translate: editTask ? 'ads.ui.admin.create.title_edit' : 'ads.ui.admin.create.title_new' })
+            .textField({ translate: 'ads.ui.admin.create.lbl_name' }, { translate: 'ads.ui.admin.create.pl_name' }, editTask?.name || '')
+            .textField({ translate: 'ads.ui.admin.create.lbl_desc' }, { translate: 'ads.ui.admin.create.pl_desc' }, editTask?.desc || '')
+            .dropdown({ translate: 'ads.ui.admin.create.lbl_cat' }, Object.values(CATEGORIES), editTask ? Math.max(0, Object.values(CATEGORIES).indexOf(editTask.category)) : 0)
+            .dropdown({ translate: 'ads.ui.admin.create.lbl_type' }, Object.values(TYPES), editTask ? Math.max(0, Object.values(TYPES).indexOf(editTask.type)) : 0)
+            .textField({ translate: 'ads.ui.admin.create.lbl_target' }, { translate: 'ads.ui.admin.create.pl_target' }, editTask?.targetRaw || (typeof editTask?.target === 'string' ? editTask.target : ''))
+            .slider({ translate: 'ads.ui.admin.create.lbl_req' }, 1, 100, 1, editTask?.req || 1)
+            .dropdown({ translate: 'ads.ui.admin.create.lbl_prereq' }, prereqOpts, editTask?.prereq ? allTasks.findIndex(t => t.id === editTask.prereq) + 1 : 0)
+            .textField({ translate: 'ads.ui.admin.create.lbl_cmds' }, { translate: 'ads.ui.admin.create.pl_cmds' }, editTask?.rewards?.commands?.join(';') || editTask?.rewardCmd || '')
+            .textField({ translate: 'ads.ui.admin.create.lbl_reward_txt' }, { translate: 'ads.ui.admin.create.pl_reward_txt' }, editTask?.rewardTxt || '')
+            .slider({ translate: 'ads.ui.admin.create.lbl_points' }, 1, 500, 1, editTask?.points || CONFIG.DEFAULT_QUEST_POINTS)
+            .toggle({ translate: 'ads.ui.admin.create.lbl_repeatable' }, editTask?.repeatable || false)
+            .slider({ translate: 'ads.ui.admin.create.lbl_cooldown' }, 0, 3600, 30, editTask?.cooldownSec || CONFIG.DEFAULT_COOLDOWN)
+            .slider({ translate: 'ads.ui.admin.create.lbl_time_limit' }, 0, 1440, 5, editTask?.deadline ? Math.round((editTask.deadline - Date.now()) / 60000) : 0)
+            .slider({ translate: 'ads.ui.admin.create.lbl_first_bonus' }, 0, 200, 5, editTask?.rewards?.firstTimeBonus || 0)
+            .textField({ translate: 'ads.ui.admin.create.lbl_pool' }, { translate: 'ads.ui.admin.create.pl_pool' }, editTask?.rewards?.pool?.join(';') || '')
             .show(player).then(r => {
                 if (r.canceled) return;
                 const [name, desc, catIdx, typeIdx, targetRaw, req, preIdx,
                     rewardCmdStr, rewardTxt, points, repeatable, cooldownSec,
                     timeLimitMin, firstTimeBonus, poolStr] = r.formValues;
                 if (!name || name.trim() === '') {
-                    player.sendMessage('§c[Quest System] Quest name cannot be empty!');
+                    player.sendMessage({ translate: 'ads.ui.admin.create.err_name' });
                     return;
                 }
                 const type = Object.values(TYPES)[typeIdx];
@@ -116,62 +118,72 @@ export class AdminUI {
                 };
                 this.db.tasks.set(id, task);
                 this.db.saveTasks();
-                let msg = `§a§lQuest ${editTask ? 'Updated' : 'Created'}! §r§f${name}`;
-                msg += `\n§7  Points: §d${points}`;
-                if (firstTimeBonus > 0) msg += ` §7(+${firstTimeBonus} first-time)`;
-                msg += ` §8| `;
-                msg += repeatable ? `§dRepeatable (${formatTime(cooldownSec)})` : '§7One-time';
-                if (timeLimitMin > 0) msg += ` §8| §c⏰ ${timeLimitMin}min limit`;
-                if (rewardPool.length > 0) msg += `\n§7  🎲 Random pool: ${rewardPool.length} items`;
-                player.sendMessage(msg);
+                
+                let repeatKey = repeatable ? 'ads.ui.admin.create.msg_repeatable' : 'ads.ui.admin.create.msg_onetime';
+                player.sendMessage({ translate: editTask ? 'ads.ui.admin.create.msg_updated' : 'ads.ui.admin.create.msg_created', with: [name, String(points), String(firstTimeBonus), String(timeLimitMin), String(rewardPool.length), formatTime(cooldownSec)] });
             });
     }
 
     uiManageQuests(player) {
-        const form = new ActionFormData().title('§b§lManage Quests');
+        const form = new ActionFormData().title({ translate: 'ads.ui.admin.manage.title' });
         const tasksList = Array.from(this.db.tasks.values());
         if (tasksList.length === 0) {
-            form.body('§7No quests created yet.');
-            form.button('§c< Back');
+            form.body({ translate: 'ads.ui.admin.manage.empty' });
+            form.button({ translate: 'ads.ui.admin.btn_back' });
             form.show(player).then(r => {
                 if (!r.canceled) system.run(() => this.openMenu(player));
             });
             return;
         }
-        form.body(`§7${tasksList.length} quest(s) total. Select one to edit.`);
+        form.body({ translate: 'ads.ui.admin.manage.body', with: [String(tasksList.length)] });
         tasksList.forEach((t) => {
             let tags = '';
             if (t.repeatable) tags += ' §d⟳';
             if (t.deadline) tags += ' §c⏰';
             if (t.chainId) tags += ' §8🔗';
-            form.button(`${t.active ? '§a' : '§c'}${t.name}${tags}\n§7ID: ${t.id}`);
+            
+            form.button({ rawtext: [
+                { text: `${t.active ? '§a' : '§c'}${t.name}${tags}\n` },
+                { translate: 'ads.ui.admin.manage.item_id', with: [t.id] }
+            ] });
         });
+        
+        form.button({ translate: 'ads.ui.admin.btn_back' });
+
         form.show(player).then(r => {
             if (r.canceled) return;
-            const task = tasksList[r.selection];
             system.run(() => {
-                let body = `§fID: §7${task.id}\n`;
-                body += `§fType: §7${task.type}\n`;
-                body += `§fTarget: §7${task.targetRaw || JSON.stringify(task.target)}\n`;
-                body += `§fPrereq: §7${task.prereq || 'None'}\n`;
-                body += `§fPoints: §d${task.points || 0}\n`;
-                body += `§fRepeatable: §7${task.repeatable ? `Yes (${formatTime(task.cooldownSec || 0)} cd)` : 'No'}\n`;
+                if (r.selection === tasksList.length) {
+                    this.openMenu(player);
+                    return;
+                }
+                const task = tasksList[r.selection];
+                
+                let body = [];
+                body.push({ translate: 'ads.ui.admin.manage.detail_id', with: [task.id] });
+                body.push({ translate: 'ads.ui.admin.manage.detail_type', with: [task.type] });
+                body.push({ translate: 'ads.ui.admin.manage.detail_target', with: [task.targetRaw || JSON.stringify(task.target)] });
+                body.push({ translate: 'ads.ui.admin.manage.detail_prereq', with: [task.prereq || 'None'] });
+                body.push({ translate: 'ads.ui.admin.manage.detail_points', with: [String(task.points || 0)] });
+                body.push({ translate: 'ads.ui.admin.manage.detail_repeatable', with: [task.repeatable ? 'Yes' : 'No', formatTime(task.cooldownSec || 0)] });
+                
                 if (task.chainId) {
                     const chain = this.db.chains.get(task.chainId);
-                    body += `§fChain: §7${chain?.name || task.chainId}\n`;
+                    body.push({ translate: 'ads.ui.admin.manage.detail_chain', with: [chain?.name || task.chainId] });
                 }
                 if (task.rewards?.pool?.length > 0) {
-                    body += `§fRandom Pool: §7${task.rewards.pool.length} items\n`;
+                    body.push({ translate: 'ads.ui.admin.manage.detail_pool', with: [String(task.rewards.pool.length)] });
                 }
                 if (task.deadline) {
                     const left = Math.max(0, Math.ceil((task.deadline - Date.now()) / 1000));
-                    body += `§fTime Left: §c${formatTime(left)}\n`;
+                    body.push({ translate: 'ads.ui.admin.manage.detail_time', with: [formatTime(left)] });
                 }
+
                 new MessageFormData()
-                    .title(`§e§lEdit: ${task.name}`)
-                    .body(body)
-                    .button1('§eEdit Quest Details')
-                    .button2('§6Toggle Active / Delete')
+                    .title({ translate: 'ads.ui.admin.manage.detail_title', with: [task.name] })
+                    .body({ rawtext: body })
+                    .button1({ translate: 'ads.ui.admin.manage.btn_edit' })
+                    .button2({ translate: 'ads.ui.admin.manage.btn_toggle' })
                     .show(player).then(res => {
                         system.run(() => {
                             if (res.selection === 0) {
@@ -179,21 +191,23 @@ export class AdminUI {
                             }
                             if (res.selection === 1) {
                                 new MessageFormData()
-                                    .title('§c§lOptions')
-                                    .body('Choose action')
-                                    .button1('§cDelete Permanently')
-                                    .button2('§eToggle Active/Inactive')
+                                    .title({ translate: 'ads.ui.admin.manage.opt_title' })
+                                    .body({ translate: 'ads.ui.admin.manage.opt_body' })
+                                    .button1({ translate: 'ads.ui.admin.manage.btn_delete' })
+                                    .button2({ translate: 'ads.ui.admin.manage.btn_toggle_active' })
                                     .show(player).then(x => {
                                         system.run(() => {
                                             if (x.selection === 0) {
                                                 this.db.tasks.delete(task.id);
                                                 this.db.saveTasks();
-                                                player.sendMessage("§cQuest Deleted");
+                                                player.sendMessage({ translate: 'ads.ui.admin.manage.msg_deleted' });
+                                                this.uiManageQuests(player);
                                             }
                                             if (x.selection === 1) {
                                                 task.active = !task.active;
                                                 this.db.saveTasks();
-                                                player.sendMessage(`§aQuest ${task.active ? 'Activated' : 'Deactivated'}`);
+                                                player.sendMessage({ translate: task.active ? 'ads.ui.admin.manage.msg_activated' : 'ads.ui.admin.manage.msg_deactivated' });
+                                                this.uiManageQuests(player);
                                             }
                                         });
                                     });
@@ -205,15 +219,15 @@ export class AdminUI {
     }
 
     uiManageChains(player) {
-        const form = new ActionFormData().title('§d§l🔗 Quest Chains');
+        const form = new ActionFormData().title({ translate: 'ads.ui.admin.chains.title' });
         const chainsList = Array.from(this.db.chains.values());
-        form.body(`§7${chainsList.length} chain(s). Chains group quests into ordered storylines.`);
-        form.button('§a+ Create New Chain', 'textures/items/chain');
+        form.body({ translate: 'ads.ui.admin.chains.body', with: [String(chainsList.length)] });
+        form.button({ translate: 'ads.ui.admin.chains.btn_create' }, 'textures/items/chain');
         chainsList.forEach(c => {
             const questCount = c.quests.length;
-            form.button(`§f${c.name}\n§7${c.arc} §8| §a${questCount} quests`, c.icon || 'textures/items/book_written');
+            form.button({ translate: 'ads.ui.admin.chains.item_btn', with: [c.name, c.arc, String(questCount)] }, c.icon || 'textures/items/book_written');
         });
-        form.button('§c< Back');
+        form.button({ translate: 'ads.ui.admin.btn_back' });
         form.show(player).then(r => {
             if (r.canceled) return;
             system.run(() => {
@@ -230,27 +244,26 @@ export class AdminUI {
 
     uiCreateChain(player, editChain = null) {
         new ModalFormData()
-            .title(editChain ? '§eEdit Chain' : '§a§lCreate Quest Chain')
-            .textField('Chain Name', 'e.g. The Iron Road', { defaultValue: editChain?.name || '' })
-            .textField('Description', 'A story of...', { defaultValue: editChain?.description || '' })
-            .textField('Story Arc', 'e.g. Main Story', { defaultValue: editChain?.arc || 'Main Story' })
-            .textField('Quest IDs (;sep, in order)', 'q_abc;q_def;q_ghi', { defaultValue: editChain?.quests?.join(';') || '' })
-            .slider('Completion Bonus Points', 0, 500, { valueStep: 10, defaultValue: editChain?.completionRewards?.points || 50 })
-            .textField('Completion Incentive Cmds (;sep)', '/give @s netherite_ingot 1', { defaultValue: editChain?.completionRewards?.commands?.join(';') || '' })
-            .textField('Completion Message', 'You finished the chapter!', { defaultValue: editChain?.completionRewards?.message || '' })
+            .title({ translate: editChain ? 'ads.ui.admin.chains.title_edit' : 'ads.ui.admin.chains.title_new' })
+            .textField({ translate: 'ads.ui.admin.chains.lbl_name' }, { translate: 'ads.ui.admin.chains.pl_name' }, editChain?.name || '')
+            .textField({ translate: 'ads.ui.admin.chains.lbl_desc' }, { translate: 'ads.ui.admin.chains.pl_desc' }, editChain?.description || '')
+            .textField({ translate: 'ads.ui.admin.chains.lbl_arc' }, { translate: 'ads.ui.admin.chains.pl_arc' }, editChain?.arc || 'Main Story')
+            .textField({ translate: 'ads.ui.admin.chains.lbl_ids' }, { translate: 'ads.ui.admin.chains.pl_ids' }, editChain?.quests?.join(';') || '')
+            .slider({ translate: 'ads.ui.admin.chains.lbl_bonus' }, 0, 500, 10, editChain?.completionRewards?.points || 50)
+            .textField({ translate: 'ads.ui.admin.chains.lbl_cmds' }, { translate: 'ads.ui.admin.chains.pl_cmds' }, editChain?.completionRewards?.commands?.join(';') || '')
+            .textField({ translate: 'ads.ui.admin.chains.lbl_msg' }, { translate: 'ads.ui.admin.chains.pl_msg' }, editChain?.completionRewards?.message || '')
             .show(player).then(r => {
                 if (r.canceled) return;
                 const [name, description, arc, questIdsRaw, bonusPts, rewardCmdsRaw, completionMsg] = r.formValues;
                 if (!name || !name.trim()) {
-                    player.sendMessage('§c[Chains] Name cannot be empty!');
+                    player.sendMessage({ translate: 'ads.ui.admin.chains.err_name' });
                     return;
                 }
                 const questIds = questIdsRaw ? questIdsRaw.split(';').filter(s => s.trim()) : [];
                 const rewardCmds = rewardCmdsRaw ? rewardCmdsRaw.split(';').filter(s => s.trim()) : [];
                 const missing = questIds.filter(id => !this.db.tasks.has(id));
                 if (missing.length > 0) {
-                    player.sendMessage(`§c[Chains] Unknown quest IDs: §f${missing.join(', ')}`);
-                    player.sendMessage(`§7Tip: Create the quests first, then add them to a chain.`);
+                    player.sendMessage({ translate: 'ads.ui.admin.chains.err_missing', with: [missing.join(', ')] });
                     return;
                 }
                 const chain = this.chains.createChain({
@@ -264,33 +277,35 @@ export class AdminUI {
                     },
                     active: true
                 });
-                player.sendMessage(`§a§lChain ${editChain ? 'Updated' : 'Created'}! §r§f${name}`);
-                player.sendMessage(`§7  Quests: §f${questIds.length} §8| §dBonus: ${bonusPts}pts`);
+                player.sendMessage({ translate: editChain ? 'ads.ui.admin.chains.msg_updated' : 'ads.ui.admin.chains.msg_created', with: [name, String(questIds.length), String(bonusPts)] });
             });
     }
 
     uiEditChain(player, chain) {
-        let body = `§fName: §7${chain.name}\n`;
-        body += `§fArc: §7${chain.arc}\n`;
-        body += `§fQuests: §7${chain.quests.length}\n`;
-        body += `§fBonus Points: §d${chain.completionRewards?.points || 0}\n\n`;
-        body += `§6§lQuest Order:\n`;
+        let body = [];
+        body.push({ translate: 'ads.ui.admin.chains.detail_name', with: [chain.name] });
+        body.push({ translate: 'ads.ui.admin.chains.detail_arc', with: [chain.arc] });
+        body.push({ translate: 'ads.ui.admin.chains.detail_quests', with: [String(chain.quests.length)] });
+        body.push({ translate: 'ads.ui.admin.chains.detail_bonus', with: [String(chain.completionRewards?.points || 0)] });
+        body.push({ translate: 'ads.ui.admin.chains.detail_order' });
+        
         chain.quests.forEach((qId, i) => {
             const task = this.db.tasks.get(qId);
-            body += `  §7${i + 1}. §f${task?.name || qId}\n`;
+            body.push({ text: `  §7${i + 1}. §f${task?.name || qId}\n` });
         });
+
         new MessageFormData()
-            .title(`§d§l🔗 ${chain.name}`)
-            .body(body)
-            .button1('§eEdit Chain')
-            .button2('§cDelete Chain')
+            .title({ translate: 'ads.ui.admin.chains.detail_title', with: [chain.name] })
+            .body({ rawtext: body })
+            .button1({ translate: 'ads.ui.admin.chains.btn_edit' })
+            .button2({ translate: 'ads.ui.admin.chains.btn_delete' })
             .show(player).then(r => {
                 system.run(() => {
                     if (r.selection === 0) {
                         this.uiCreateChain(player, chain);
                     } else if (r.selection === 1) {
                         this.chains.deleteChain(chain.id);
-                        player.sendMessage(`§cChain "${chain.name}" deleted. Quests preserved.`);
+                        player.sendMessage({ translate: 'ads.ui.admin.chains.msg_deleted', with: [chain.name] });
                         this.uiManageChains(player);
                     }
                 });
@@ -306,6 +321,7 @@ export class AdminUI {
         const chainedQuests = tasks.filter(t => t.chainId).length;
         const totalChains = this.db.chains.size;
         const exchangeItems = this.db.shop.size;
+        
         const online = world.getAllPlayers();
         const onlinePlayers = online.length;
         const onlineNames = new Map();
@@ -313,20 +329,24 @@ export class AdminUI {
             onlineNames.set(p.id, p.name);
             this.db.getPlayer(p.id);
         });
+
         const playerRows = Array.from(this.db.playerData.entries()).map(([id, data], index) => ({
             id,
             name: onlineNames.get(id) || `Saved Player ${index + 1}`,
             online: onlineNames.has(id),
             data
         }));
+
         const savedPlayers = playerRows.length;
         const totalCompletions = playerRows.reduce((sum, row) => sum + (row.data.stats?.tasksCompleted || row.data.completed?.length || 0), 0);
         const totalPoints = playerRows.reduce((sum, row) => sum + (row.data.points || 0), 0);
         const totalAchievements = playerRows.reduce((sum, row) => sum + (row.data.achievements?.length || 0), 0);
         const bestStreak = playerRows.reduce((best, row) => Math.max(best, row.data.streak?.bestStreak || 0), 0);
+        
         const topPlayer = playerRows
             .slice()
             .sort((a, b) => (b.data.points || 0) - (a.data.points || 0) || (b.data.stats?.tasksCompleted || 0) - (a.data.stats?.tasksCompleted || 0))[0];
+
         let mostCompleted = { name: 'N/A', count: 0 };
         tasks.forEach(task => {
             const count = playerRows.filter(row => row.data.completed?.includes(task.id)).length;
@@ -334,29 +354,24 @@ export class AdminUI {
                 mostCompleted = { name: task.name, count };
             }
         });
-        let body = `§5§lSYSTEM OVERVIEW\n`;
-        body += `§8────────────────────────\n`;
-        body += `§fQuests: §a${activeQuests} active §8/ §7${totalQuests} total\n`;
-        body += `§fInactive: §c${totalQuests - activeQuests} §8| §dRepeatable: §f${repeatableQuests} §8| §cTimed: §f${timedQuests}\n`;
-        body += `§fLinked to chains: §d${chainedQuests} §8| §fChains: §d${totalChains}\n`;
-        body += `§fExchange items: §6${exchangeItems}\n\n`;
-        body += `§3§lPLAYER ACTIVITY\n`;
-        body += `§8────────────────────────\n`;
-        body += `§fOnline now: §b${onlinePlayers} §8| §fSaved profiles: §b${savedPlayers}\n`;
-        body += `§fTotal completions: §a${totalCompletions}\n`;
-        body += `§fCurrent points in wallets: §d${totalPoints}\n`;
-        body += `§fAchievements unlocked: §e${totalAchievements}\n`;
-        body += `§fBest streak recorded: §6${bestStreak} days\n\n`;
-        body += `§e§lTOP SIGNALS\n`;
-        body += `§8────────────────────────\n`;
-        body += `§fTop player: §e${topPlayer ? topPlayer.name : 'N/A'} §8- §d${topPlayer?.data.points || 0} pts\n`;
-        body += `§fMost completed quest: §a${mostCompleted.name} §8- §f${mostCompleted.count} clears\n`;
-        body += `§7Tip: leaderboard uses online players plus cached saved profiles loaded this session.`;
+
         new MessageFormData()
-            .title('§5§lAdmin Dashboard')
-            .body(body)
-            .button1('§aBack to Admin')
-            .button2('§cClose')
+            .title({ translate: 'ads.ui.admin.stats.title' })
+            .body({ translate: 'ads.ui.admin.stats.body', with: [
+                String(activeQuests), String(totalQuests),
+                String(totalQuests - activeQuests), String(repeatableQuests), String(timedQuests),
+                String(chainedQuests), String(totalChains),
+                String(exchangeItems),
+                String(onlinePlayers), String(savedPlayers),
+                String(totalCompletions),
+                String(totalPoints),
+                String(totalAchievements),
+                String(bestStreak),
+                topPlayer ? topPlayer.name : 'N/A', String(topPlayer?.data.points || 0),
+                mostCompleted.name, String(mostCompleted.count)
+            ]})
+            .button1({ translate: 'ads.ui.admin.btn_back' })
+            .button2({ translate: 'ads.ui.btn_close' })
             .show(player).then(r => {
                 if (r.selection === 0) system.run(() => this.openMenu(player));
             });
@@ -364,16 +379,16 @@ export class AdminUI {
 
     uiShowGuide(player) {
         new ActionFormData()
-            .title('§e§lAdmin Guide')
-            .body('§7Pick a setup topic. Each page gives exact formats and safe examples for quest creation.')
-            .button('§aQuick Start\n§7Build a working quest fast', 'textures/items/book_normal')
-            .button('§bBlocks, Items & Crafting\n§7Mine, place, gather, craft', 'textures/items/diamond_pickaxe')
-            .button('§cCombat & Deaths\n§7Mob kills and death tracking', 'textures/items/diamond_sword')
-            .button('§aTravel & Routes\n§7Visit points and waypoint paths', 'textures/items/compass_item')
-            .button('§6Rewards & Shop\n§7Points, commands, random pools', 'textures/items/gold_ingot')
-            .button('§dChains & Progression\n§7Story arcs and unlock order', 'textures/items/chain')
-            .button('§5Admin Tools\n§7Stats, leaderboard, maintenance', 'textures/items/clock_item')
-            .button('§cBack')
+            .title({ translate: 'ads.ui.admin.guide.title' })
+            .body({ translate: 'ads.ui.admin.guide.body' })
+            .button({ translate: 'ads.ui.admin.guide.btn_quick' }, 'textures/items/book_normal')
+            .button({ translate: 'ads.ui.admin.guide.btn_blocks' }, 'textures/items/diamond_pickaxe')
+            .button({ translate: 'ads.ui.admin.guide.btn_combat' }, 'textures/items/diamond_sword')
+            .button({ translate: 'ads.ui.admin.guide.btn_travel' }, 'textures/items/compass_item')
+            .button({ translate: 'ads.ui.admin.guide.btn_rewards' }, 'textures/items/gold_ingot')
+            .button({ translate: 'ads.ui.admin.guide.btn_chains' }, 'textures/items/chain')
+            .button({ translate: 'ads.ui.admin.guide.btn_tools' }, 'textures/items/clock_item')
+            .button({ translate: 'ads.ui.admin.btn_back' })
             .show(player).then(r => {
                 system.run(() => {
                     if (r.canceled || r.selection === 7) {
@@ -386,43 +401,14 @@ export class AdminUI {
     }
 
     uiShowGuideDetail(player, pageIndex) {
-        let title = "";
-        let content = "";
-        switch (pageIndex) {
-            case 0:
-                title = "Quick Start";
-                content = "§a§lRecommended Flow§r\n\n§f1. Create Quest\n§7Choose a clear name, short description, category, and type.\n\n§f2. Set Target\n§7Use exact IDs like minecraft:zombie or minecraft:diamond_ore.\n\n§f3. Set Required Amount\n§7Keep early quests small so players understand the system.\n\n§f4. Add Points and Rewards\n§7Points always work. Commands are optional and run after completion.\n\n§f5. Test in Player Mode\n§7Use Player Mode from the admin menu before publishing many quests.";
-                break;
-            case 1:
-                title = "Blocks, Items & Crafting";
-                content = "§b§lBlock Quest§r\n§7Target: minecraft:stone\n§7Tracks blocks broken.\n\n§a§lPlace Quest§r\n§7Target: minecraft:oak_planks\n§7Tracks blocks placed.\n\n§6§lGather Quest§r\n§7Target: minecraft:apple\n§7Tracks item gains in inventory.\n\n§e§lCraft Quest§r\n§7Target: minecraft:crafting_table\n§7Tracks crafted items when detected by the script.\n\n§fUse exact identifiers. Custom addon IDs work when the item/block exists.";
-                break;
-            case 2:
-                title = "Combat & Deaths";
-                content = "§c§lKill Quest§r\n§7Target: minecraft:zombie\n§7Required amount: number of kills.\n\n§4§lBoss or Custom Mob§r\n§7Target: custom_addon:boss_id\n§7Use the entity type ID from the addon.\n\n§8§lDeath Quest§r\n§7Type: death\n§7Target can be left blank. Required amount controls death count.\n\n§fKeep combat rewards higher than simple gather quests because risk is higher.";
-                break;
-            case 3:
-                title = "Travel & Routes";
-                content = "§a§lVisit Quest§r\n§7Target format: x,y,z\n§7Example: 100,64,100\n§7Completes when player is within " + CONFIG.PROXIMITY + " blocks.\n\n§2§lWalk Quest§r\n§7Target format: x,y,z;x,y,z;x,y,z\n§7Example: 0,64,0;50,65,25;100,70,100\n§7Use this for patrols, tours, and story routes.\n\n§fAvoid placing targets inside walls, water, lava, or protected areas.";
-                break;
-            case 4:
-                title = "Rewards & Shop";
-                content = "§6§lReward Commands§r\n§7Separate multiple commands with semicolons.\n§7Example: /give @s diamond 1;/xp 5L @s\n\n§d§lQuest Points§r\n§7Points feed the leaderboard and shop economy.\n\n§e§lFirst-Time Bonus§r\n§7Useful for repeatable quests. Players get extra points only the first time.\n\n§b§lRandom Pool§r\n§7Put command options in the random pool. One reward is selected when completed.\n\n§fShop items should cost more than one easy quest to keep the economy balanced.";
-                break;
-            case 5:
-                title = "Chains & Progression";
-                content = "§d§lQuest Chains§r\n§7Chains turn separate quests into ordered storylines.\n\n§fQuest IDs§r\n§7Use semicolon-separated IDs in order:\n§7q_first;q_second;q_final\n\n§a§lCompletion Bonus§r\n§7Award bonus points or commands when the full chain is complete.\n\n§e§lBest Practice§r\n§7Create all quests first, copy their IDs from Manage Quests, then build the chain.\n\n§fChains are best for tutorials, chapters, server events, and rank progression.";
-                break;
-            case 6:
-                title = "Admin Tools";
-                content = "§5§lAdmin Dashboard§r\n§7Shows quest counts, player activity, points, achievements, and top signals.\n\n§3§lLeaderboard§r\n§7Ranks online players and cached saved profiles loaded this session.\n\n§e§lAchievements§r\n§7Players unlock achievements automatically from tracked stats.\n\n§c§lReset My Data§r\n§7Only resets the admin player's own saved quest data. It does not delete global quests.\n\n§fUse stats after events to see which quests players actually complete.";
-                break;
-        }
+        const pages = ['quick', 'blocks', 'combat', 'travel', 'rewards', 'chains', 'tools'];
+        const pageKey = pages[pageIndex];
+
         new MessageFormData()
-            .title(`§l${title}`)
-            .body(content)
-            .button1("§aBack to Guide")
-            .button2("§cClose")
+            .title({ translate: `ads.ui.admin.guide.title_${pageKey}` })
+            .body({ translate: `ads.ui.admin.guide.body_${pageKey}` })
+            .button1({ translate: 'ads.ui.admin.guide.btn_back' })
+            .button2({ translate: 'ads.ui.btn_close' })
             .show(player).then(r => {
                 if (r.selection === 0) system.run(() => this.uiShowGuide(player));
             });
