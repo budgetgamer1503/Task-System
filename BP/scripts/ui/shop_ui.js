@@ -112,10 +112,10 @@ export class ShopUI {
 
         new ModalFormData()
             .title({ translate: editItem ? 'ads.ui.admin_shop.edit_title' : 'ads.ui.admin_shop.add_title' })
-            .textField({ translate: 'ads.ui.admin_shop.lbl_name' }, { translate: 'ads.ui.admin_shop.pl_name' }, editItem?.name || '')
-            .slider({ translate: 'ads.ui.admin_shop.lbl_price' }, 1, 5000, 5, editItem?.price || 50)
-            .textField({ translate: 'ads.ui.admin_shop.lbl_cmds' }, { translate: 'ads.ui.admin_shop.pl_cmds' }, existingCmds.join(';') || '')
-            .textField({ translate: 'ads.ui.admin_shop.lbl_icon' }, { translate: 'ads.ui.admin_shop.pl_icon' }, editItem?.icon || 'textures/items/gold_ingot')
+            .textField({ translate: 'ads.ui.admin_shop.lbl_name' }, { translate: 'ads.ui.admin_shop.pl_name' }, { defaultValue: editItem?.name || '' })
+            .slider({ translate: 'ads.ui.admin_shop.lbl_price' }, 1, 5000, { valueStep: 5, defaultValue: editItem?.price || 50 })
+            .textField({ translate: 'ads.ui.admin_shop.lbl_cmds' }, { translate: 'ads.ui.admin_shop.pl_cmds' }, { defaultValue: existingCmds.join(';') || '' })
+            .textField({ translate: 'ads.ui.admin_shop.lbl_icon' }, { translate: 'ads.ui.admin_shop.pl_icon' }, { defaultValue: editItem?.icon || 'textures/items/gold_ingot' })
             .show(player).then(r => {
                 if (r.canceled) return;
                 const [name, price, commandStr, icon] = r.formValues;
