@@ -1,0 +1,74 @@
+item.ads:vanilla_quest.name=§6任務書
+item.ads:vanilla_quest.tooltip=§7右鍵點擊打開任務系統 v3.0\n§d§o點數 • 商店 • 可重複 • 限時\n§7§o創造/管理員: 創建和管理任務\n§7§o生存: 查看任務、商店和排行榜\n\n\nads.ui.quest_log.title=§6§l任务书 §r§7v3.0
+ads.ui.quest_log.body=§7使用 /tag @s add admin 管理任务。\n\n§d§l点数: §f%1 §8| §a§l已完成: §f%2/%3\n§7进度: %4 §f%5%%\n§e🏆 成就: §f%6/%7
+ads.ui.quest_log.streak= §8| §6🔥 %1天连续
+ads.ui.prefix.locked=§8[已锁定] 
+ads.ui.prefix.cooldown=§c[冷却中] 
+ads.ui.prefix.done=§a[完成] 
+ads.ui.prefix.tracked=§6[追踪中] 
+ads.ui.quest_btn.points=\n§7%1 §8| §d%2点数
+ads.ui.quest_log.btn_chains=§d🔗 任务链
+ads.ui.quest_log.btn_achievements=§e🏆 成就
+ads.ui.quest_log.btn_leaderboard=§3排行榜
+ads.ui.quest_log.btn_shop=§6任务商店
+
+ads.ui.quest_details.header=§6%1\n§7%2\n§8类型: %3\n\n§f%4\n\n
+ads.ui.quest_details.points=§d点数: §f%1
+ads.ui.quest_details.repeatable=  §d§l⟳ 可重复
+ads.ui.quest_details.first_time=  §e(+%1 首次完成)
+ads.ui.quest_details.chain=§8🔗 链: §7%1 §8(%2/%3)\n
+ads.ui.quest_details.time_remaining=§c⏰ 剩余时间: §f%1\n
+ads.ui.quest_details.random_bonus=§e🎲 有随机额外奖励\n
+ads.ui.quest_details.locked=§c⚠ 已锁定！请先完成 "%1"。
+ads.ui.quest_details.cooldown=§c⏳ 冷却中: §f%1\n§7冷却结束后此任务将重置。
+ads.ui.quest_details.completed_msg=§a✔ 已完成！
+ads.ui.quest_details.progress_msg=§7进度: §f%1/%2\n%3
+ads.ui.quest_details.title=§8§l任务详情
+ads.ui.quest_details.btn_stop_tracking=§c取消追踪
+ads.ui.quest_details.btn_track=§a追踪任务
+ads.ui.btn_back=§c返回
+ads.ui.btn_close=§c关闭
+
+ads.ui.quest_chains.title=§d§l🔗 任务链
+ads.ui.quest_chains.empty=§7暂无可用任务链。
+ads.ui.quest_chains.completed_count=§7有序的任务剧情。\n§d§l已完成: §f%1/%2\n
+
+ads.ui.chain_detail.desc=§6§l%1\n§7%2\n§8篇章: %3\n\n
+ads.ui.chain_detail.progress=§f进度: %1 §f%2/%3\n\n
+ads.ui.chain_detail.order=§e§l任务顺序:\n
+ads.ui.chain_detail.complete=\n§a§l✔ 链完成！
+ads.ui.chain_detail.bonus= §d(+%1 奖励点数)
+ads.ui.chain_detail.current=\n§e当前: §f%1
+ads.ui.chain_detail.title=§d§l🔗 %1
+ads.ui.chain_detail.btn_back=§c返回任务链
+
+ads.ui.achievements.title=§e§l成就库
+ads.ui.achievements.overall=§e§l总体: §f%1/%2 §8(%3%%)\n
+ads.ui.achievements.visible_hidden=§7可见锁定: §f%1 §8| §7隐藏发现: §f%2\n
+ads.ui.achievements.closest=\n§a§l最近解锁\n
+ads.ui.achievements.closest_desc=%1 §f%2 §8- §7%3/%4 §8(%5%%)\n
+ads.ui.achievements.all_complete=\n§a所有可见成就已完成，可能还有隐藏成就。\n
+ads.ui.achievements.cat_desc=§f%1\n§7%2/%3 已解锁 §8| §e%4%%
+
+ads.ui.achievement_category.progress=§e§l%1\n§7分类进度: §f%2/%3 §8(%4%%)\n
+ads.ui.achievement_category.unlocked=%1 §a%2\n  §7%3\n  §d+%4 点数 §a✔ 已解锁\n\n
+ads.ui.achievement_category.hidden=§8§l? §7??? §8(隐藏)\n  §8完成后揭晓\n\n
+ads.ui.achievement_category.locked=%1 §7%2\n  §7%3\n  %4 §f%5/%6 §8| §d%7 点数\n  §8%8 还需\n\n
+ads.ui.achievement_category.title=§e§l%1 成就
+ads.ui.achievement_category.btn_back=§a返回成就
+
+ads.ui.leaderboard.header=§3§l任务排行榜\n§8────────────────────────\n
+ads.ui.leaderboard.desc=§7根据钱包点数和已完成任务排名。\n
+ads.ui.leaderboard.players=§7显示玩家: §f%1 §8| §7在线: §b%2\n\n
+ads.ui.leaderboard.empty=§7尚未加载玩家数据。
+ads.ui.leaderboard.entry=%1 §f%2%3\n   §d%4 点数 §8| §a%5 任务 §8| §e%6/%7 成就
+ads.ui.leaderboard.entry_streak= §8| §6%1d 连击\n\n
+ads.ui.leaderboard.hidden_profiles=§8%1 更多保存的档案已隐藏。\n\n
+ads.ui.leaderboard.your_stats=\n\n§6§l你的统计:\n
+ads.ui.leaderboard.rank=§f排名: §e%1\n
+ads.ui.leaderboard.unranked=§f排名: §e未排名\n
+ads.ui.leaderboard.wallet=§d钱包点数: §f%1\n
+ads.ui.leaderboard.quests_completed=§a已完成: §f%1 任务\n
+ads.ui.leaderboard.ach_count=§e成就: §f%1/%2\n
+ads.ui.leaderboard.best_streak=§6最佳连击: §f%1 天
+ads.ui.leaderboard.title=§3§l排行榜

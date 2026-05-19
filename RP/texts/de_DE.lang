@@ -1,0 +1,74 @@
+item.ads:vanilla_quest.name=§6Quest-Buch
+item.ads:vanilla_quest.tooltip=§7Rechtsklick zum Öffnen des Quest-Systems v3.0\n§d§oPunkte • Shop • Wiederholbar • Auf Zeit\n§7§oKreativ/Admin: Quests erstellen & verwalten\n§7§oÜberleben: Quests, Shop & Bestenliste ansehen\n\n\nads.ui.quest_log.title=§6§lQuest-Buch §r§7v3.0
+ads.ui.quest_log.body=§7Nutze /tag @s add admin, um Quests zu verwalten.\n\n§d§lPunkte: §f%1 §8| §a§lAbgeschlossen: §f%2/%3\n§7Fortschritt: %4 §f%5%%\n§e🏆 Erfolge: §f%6/%7
+ads.ui.quest_log.streak= §8| §6🔥 %1 Tage in Folge
+ads.ui.prefix.locked=§8[Gesperrt] 
+ads.ui.prefix.cooldown=§c[Abklingzeit] 
+ads.ui.prefix.done=§a[Erledigt] 
+ads.ui.prefix.tracked=§6[VERFOLGT] 
+ads.ui.quest_btn.points=\n§7%1 §8| §d%2Pkte
+ads.ui.quest_log.btn_chains=§d🔗 Quest-Ketten
+ads.ui.quest_log.btn_achievements=§e🏆 Erfolge
+ads.ui.quest_log.btn_leaderboard=§3Bestenliste
+ads.ui.quest_log.btn_shop=§6Quest-Shop
+
+ads.ui.quest_details.header=§6%1\n§7%2\n§8Typ: %3\n\n§f%4\n\n
+ads.ui.quest_details.points=§dPunkte: §f%1
+ads.ui.quest_details.repeatable=  §d§l⟳ Wiederholbar
+ads.ui.quest_details.first_time=  §e(+%1 beim ersten Mal)
+ads.ui.quest_details.chain=§8🔗 Kette: §7%1 §8(%2/%3)\n
+ads.ui.quest_details.time_remaining=§c⏰ Verbleibende Zeit: §f%1\n
+ads.ui.quest_details.random_bonus=§e🎲 Hat zufällige Bonusbelohnung\n
+ads.ui.quest_details.locked=§c⚠ Gesperrt! Schließe zuerst "%1" ab.
+ads.ui.quest_details.cooldown=§c⏳ Auf Abklingzeit: §f%1\n§7Diese Quest wird nach Ablauf der Abklingzeit zurückgesetzt.
+ads.ui.quest_details.completed_msg=§a✔ Abgeschlossen!
+ads.ui.quest_details.progress_msg=§7Fortschritt: §f%1/%2\n%3
+ads.ui.quest_details.title=§8§lQuest-Details
+ads.ui.quest_details.btn_stop_tracking=§cVerfolgung beenden
+ads.ui.quest_details.btn_track=§aQuest verfolgen
+ads.ui.btn_back=§cZurück
+ads.ui.btn_close=§cSchließen
+
+ads.ui.quest_chains.title=§d§l🔗 Quest-Ketten
+ads.ui.quest_chains.empty=§7Noch keine Quest-Ketten verfügbar.
+ads.ui.quest_chains.completed_count=§7Geordnete Quest-Geschichten.\n§d§lAbgeschlossen: §f%1/%2\n
+
+ads.ui.chain_detail.desc=§6§l%1\n§7%2\n§8Bogen: %3\n\n
+ads.ui.chain_detail.progress=§fFortschritt: %1 §f%2/%3\n\n
+ads.ui.chain_detail.order=§e§lQuest-Reihenfolge:\n
+ads.ui.chain_detail.complete=\n§a§l✔ Kette Abgeschlossen!
+ads.ui.chain_detail.bonus= §d(+%1 Bonus-Punkte)
+ads.ui.chain_detail.current=\n§eAktuell: §f%1
+ads.ui.chain_detail.title=§d§l🔗 %1
+ads.ui.chain_detail.btn_back=§cZurück zu Ketten
+
+ads.ui.achievements.title=§e§lErfolgskammer
+ads.ui.achievements.overall=§e§lInsgesamt: §f%1/%2 §8(%3%%)\n
+ads.ui.achievements.visible_hidden=§7Sichtbar gesperrt: §f%1 §8| §7Versteckt gefunden: §f%2\n
+ads.ui.achievements.closest=\n§a§lNächste Freischaltung\n
+ads.ui.achievements.closest_desc=%1 §f%2 §8- §7%3/%4 §8(%5%%)\n
+ads.ui.achievements.all_complete=\n§aAlle sichtbaren Erfolge sind abgeschlossen. Es könnten noch versteckte Erfolge übrig sein.\n
+ads.ui.achievements.cat_desc=§f%1\n§7%2/%3 freigeschaltet §8| §e%4%%
+
+ads.ui.achievement_category.progress=§e§l%1\n§7Kategoriefortschritt: §f%2/%3 §8(%4%%)\n
+ads.ui.achievement_category.unlocked=%1 §a%2\n  §7%3\n  §d+%4 Pkte §a✔ Freigeschaltet\n\n
+ads.ui.achievement_category.hidden=§8§l? §7??? §8(Versteckt)\n  §8Abschließen zum Aufdecken\n\n
+ads.ui.achievement_category.locked=%1 §7%2\n  §7%3\n  %4 §f%5/%6 §8| §d%7 Pkte\n  §8%8 mehr benötigt\n\n
+ads.ui.achievement_category.title=§e§l%1 Erfolge
+ads.ui.achievement_category.btn_back=§aZurück zu Erfolgen
+
+ads.ui.leaderboard.header=§3§lQUEST-BESTENLISTE\n§8────────────────────────\n
+ads.ui.leaderboard.desc=§7Geordnet nach Punkten, dann nach abgeschlossenen Quests.\n
+ads.ui.leaderboard.players=§7Gezeigte Spieler: §f%1 §8| §7Online: §b%2\n\n
+ads.ui.leaderboard.empty=§7Noch keine Spielerdaten geladen.
+ads.ui.leaderboard.entry=%1 §f%2%3\n   §d%4 Pkte §8| §a%5 Quests §8| §e%6/%7 Erf.
+ads.ui.leaderboard.entry_streak= §8| §6%1d Serie\n\n
+ads.ui.leaderboard.hidden_profiles=§8%1 weitere Profile versteckt.\n\n
+ads.ui.leaderboard.your_stats=\n\n§6§lDeine Statistiken:\n
+ads.ui.leaderboard.rank=§fRang: §e%1\n
+ads.ui.leaderboard.unranked=§fRang: §eNicht gewertet\n
+ads.ui.leaderboard.wallet=§dGeldbeutelpunkte: §f%1\n
+ads.ui.leaderboard.quests_completed=§aAbgeschlossen: §f%1 Quests\n
+ads.ui.leaderboard.ach_count=§eErfolge: §f%1/%2\n
+ads.ui.leaderboard.best_streak=§6Beste Serie: §f%1 Tage
+ads.ui.leaderboard.title=§3§lBestenliste

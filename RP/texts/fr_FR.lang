@@ -1,0 +1,74 @@
+item.ads:vanilla_quest.name=§6Livre de Quêtes
+item.ads:vanilla_quest.tooltip=§7Clic droit pour ouvrir le Système de Quêtes v3.0\n§d§oPoints • Boutique • Répétable • Chronométré\n§7§oCréatif/Admin : Créer et gérer les quêtes\n§7§oSurvie : Voir les quêtes, boutique et classement\n\n\nads.ui.quest_log.title=§6§lLivre de Quêtes §r§7v3.0
+ads.ui.quest_log.body=§7Utilisez /tag @s add admin pour gérer les quêtes.\n\n§d§lPoints: §f%1 §8| §a§lTerminé: §f%2/%3\n§7Progression: %4 §f%5%%\n§e🏆 Succès: §f%6/%7
+ads.ui.quest_log.streak= §8| §6🔥 %1 jours consécutifs
+ads.ui.prefix.locked=§8[Verrouillé] 
+ads.ui.prefix.cooldown=§c[Recharge] 
+ads.ui.prefix.done=§a[Fait] 
+ads.ui.prefix.tracked=§6[SUIVI] 
+ads.ui.quest_btn.points=\n§7%1 §8| §d%2pts
+ads.ui.quest_log.btn_chains=§d🔗 Chaînes de Quêtes
+ads.ui.quest_log.btn_achievements=§e🏆 Succès
+ads.ui.quest_log.btn_leaderboard=§3Classement
+ads.ui.quest_log.btn_shop=§6Boutique de Quêtes
+
+ads.ui.quest_details.header=§6%1\n§7%2\n§8Type: %3\n\n§f%4\n\n
+ads.ui.quest_details.points=§dPoints: §f%1
+ads.ui.quest_details.repeatable=  §d§l⟳ Répétable
+ads.ui.quest_details.first_time=  §e(+%1 première fois)
+ads.ui.quest_details.chain=§8🔗 Chaîne: §7%1 §8(%2/%3)\n
+ads.ui.quest_details.time_remaining=§c⏰ Temps Restant: §f%1\n
+ads.ui.quest_details.random_bonus=§e🎲 A une récompense bonus aléatoire\n
+ads.ui.quest_details.locked=§c⚠ Verrouillé! Complétez "%1" en premier.
+ads.ui.quest_details.cooldown=§c⏳ En Recharge: §f%1\n§7Cette quête se réinitialisera à la fin du temps de recharge.
+ads.ui.quest_details.completed_msg=§a✔ Terminé!
+ads.ui.quest_details.progress_msg=§7Progression: §f%1/%2\n%3
+ads.ui.quest_details.title=§8§lDétails de la Quête
+ads.ui.quest_details.btn_stop_tracking=§cArrêter le Suivi
+ads.ui.quest_details.btn_track=§aSuivre la Quête
+ads.ui.btn_back=§cRetour
+ads.ui.btn_close=§cFermer
+
+ads.ui.quest_chains.title=§d§l🔗 Chaînes de Quêtes
+ads.ui.quest_chains.empty=§7Aucune chaîne de quêtes disponible pour le moment.
+ads.ui.quest_chains.completed_count=§7Histoires de quêtes ordonnées.\n§d§lTerminé: §f%1/%2\n
+
+ads.ui.chain_detail.desc=§6§l%1\n§7%2\n§8Arc: %3\n\n
+ads.ui.chain_detail.progress=§fProgression: %1 §f%2/%3\n\n
+ads.ui.chain_detail.order=§e§lOrdre de la Quête:\n
+ads.ui.chain_detail.complete=\n§a§l✔ Chaîne Complète!
+ads.ui.chain_detail.bonus= §d(+%1 pts bonus)
+ads.ui.chain_detail.current=\n§eActuel: §f%1
+ads.ui.chain_detail.title=§d§l🔗 %1
+ads.ui.chain_detail.btn_back=§cRetour aux Chaînes
+
+ads.ui.achievements.title=§e§lChambre des Succès
+ads.ui.achievements.overall=§e§lGlobal: §f%1/%2 §8(%3%%)\n
+ads.ui.achievements.visible_hidden=§7Visible verrouillé: §f%1 §8| §7Caché trouvé: §f%2\n
+ads.ui.achievements.closest=\n§a§lDéverrouillage le plus proche\n
+ads.ui.achievements.closest_desc=%1 §f%2 §8- §7%3/%4 §8(%5%%)\n
+ads.ui.achievements.all_complete=\n§aTous les succès visibles sont terminés. Des succès cachés peuvent encore rester.\n
+ads.ui.achievements.cat_desc=§f%1\n§7%2/%3 déverrouillé §8| §e%4%%
+
+ads.ui.achievement_category.progress=§e§l%1\n§7Progression de la catégorie: §f%2/%3 §8(%4%%)\n
+ads.ui.achievement_category.unlocked=%1 §a%2\n  §7%3\n  §d+%4 pts §a✔ Déverrouillé\n\n
+ads.ui.achievement_category.hidden=§8§l? §7??? §8(Caché)\n  §8Compléter pour révéler\n\n
+ads.ui.achievement_category.locked=%1 §7%2\n  §7%3\n  %4 §f%5/%6 §8| §d%7 pts\n  §8%8 plus nécessaire\n\n
+ads.ui.achievement_category.title=§e§l%1 Succès
+ads.ui.achievement_category.btn_back=§aRetour aux Succès
+
+ads.ui.leaderboard.header=§3§lCLASSEMENT DES QUÊTES\n§8────────────────────────\n
+ads.ui.leaderboard.desc=§7Classé par points de portefeuille, puis par quêtes terminées.\n
+ads.ui.leaderboard.players=§7Joueurs affichés: §f%1 §8| §7En ligne: §b%2\n\n
+ads.ui.leaderboard.empty=§7Aucune donnée joueur chargée.
+ads.ui.leaderboard.entry=%1 §f%2%3\n   §d%4 pts §8| §a%5 quêtes §8| §e%6/%7 succès
+ads.ui.leaderboard.entry_streak= §8| §6%1d série\n\n
+ads.ui.leaderboard.hidden_profiles=§8%1 plus de profils sauvegardés masqués.\n\n
+ads.ui.leaderboard.your_stats=\n\n§6§lVos Statistiques:\n
+ads.ui.leaderboard.rank=§fRang: §e%1\n
+ads.ui.leaderboard.unranked=§fRang: §eNon classé\n
+ads.ui.leaderboard.wallet=§dPoints de Portefeuille: §f%1\n
+ads.ui.leaderboard.quests_completed=§aTerminé: §f%1 quêtes\n
+ads.ui.leaderboard.ach_count=§eSuccès: §f%1/%2\n
+ads.ui.leaderboard.best_streak=§6Meilleure Série: §f%1 jours
+ads.ui.leaderboard.title=§3§lClassement

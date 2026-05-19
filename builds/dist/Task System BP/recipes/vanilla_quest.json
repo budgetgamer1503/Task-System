@@ -1,0 +1,32 @@
+{
+	"format_version": "1.19.0",
+	"minecraft:recipe_shaped": {
+		"description": {
+			"identifier": "ads:vanilla_quest"
+		},
+		"tags": [
+			"crafting_table"
+		],
+		"pattern": [
+			" E ",
+			"EBE",
+			" P "
+		],
+		"key": {
+			"P": {
+				"item": "minecraft:paper"
+			},
+			"E": {
+				"item": "minecraft:emerald"
+			},
+			"B": {
+				"item": "minecraft:book"
+			}
+		},
+		"result": {
+			"item": "ads:vanilla_quest",
+			"count": 1
+		},
+		"priority": 1
+	}
+}

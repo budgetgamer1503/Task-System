@@ -1,0 +1,44 @@
+{
+	"format_version": 2,
+	"metadata": {
+		"authors": [
+			"BudgetGamer1503"
+		]
+	},
+	"header": {
+		"name": "Task System",
+		"description": "Quest Engine v3.0 — Chains, Achievements, Advanced Rewards & More",
+		"min_engine_version": [
+			1,
+			21,
+			0
+		],
+		"uuid": "ed39d6b4-99ea-41e3-b9fb-96eade27e6a5",
+		"version": [
+			3,
+			0,
+			0
+		]
+	},
+	"modules": [
+		{
+			"type": "resources",
+			"uuid": "b8bae987-ebf1-4f41-8f2f-99aad7a64ea7",
+			"version": [
+				3,
+				0,
+				0
+			]
+		}
+	],
+	"dependencies": [
+		{
+			"uuid": "1d6a808a-004a-4498-95fd-dfa7b0eccef2",
+			"version": [
+				3,
+				0,
+				0
+			]
+		}
+	]
+}

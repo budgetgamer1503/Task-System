@@ -1,0 +1,74 @@
+item.ads:vanilla_quest.name=§6Книга квестов
+item.ads:vanilla_quest.tooltip=§7ПКМ, чтобы открыть систему квестов v3.0\n§d§oОчки • Магазин • Повторяемые • На время\n§7§oКреатив/Админ: Создание и управление\n§7§oВыживание: Квесты, магазин и таблица лидеров\n\n\nads.ui.quest_log.title=§6§lКнига Квестов §r§7v3.0
+ads.ui.quest_log.body=§7Используйте /tag @s add admin для управления.\n\n§d§lОчки: §f%1 §8| §a§lВыполнено: §f%2/%3\n§7Прогресс: %4 §f%5%%\n§e🏆 Достижения: §f%6/%7
+ads.ui.quest_log.streak= §8| §6🔥 %1 дн. серия
+ads.ui.prefix.locked=§8[Заблокировано] 
+ads.ui.prefix.cooldown=§c[Перезарядка] 
+ads.ui.prefix.done=§a[Готово] 
+ads.ui.prefix.tracked=§6[ОТСЛЕЖИВАЕТСЯ] 
+ads.ui.quest_btn.points=\n§7%1 §8| §d%2очк.
+ads.ui.quest_log.btn_chains=§d🔗 Цепочки Квестов
+ads.ui.quest_log.btn_achievements=§e🏆 Достижения
+ads.ui.quest_log.btn_leaderboard=§3Таблица Лидеров
+ads.ui.quest_log.btn_shop=§6Магазин Квестов
+
+ads.ui.quest_details.header=§6%1\n§7%2\n§8Тип: %3\n\n§f%4\n\n
+ads.ui.quest_details.points=§dОчки: §f%1
+ads.ui.quest_details.repeatable=  §d§l⟳ Повторяемый
+ads.ui.quest_details.first_time=  §e(+%1 в первый раз)
+ads.ui.quest_details.chain=§8🔗 Цепочка: §7%1 §8(%2/%3)\n
+ads.ui.quest_details.time_remaining=§c⏰ Оставшееся время: §f%1\n
+ads.ui.quest_details.random_bonus=§e🎲 Случайная награда\n
+ads.ui.quest_details.locked=§c⚠ Заблокировано! Выполните "%1" сначала.
+ads.ui.quest_details.cooldown=§c⏳ Перезарядка: §f%1\n§7Квест обновится после окончания перезарядки.
+ads.ui.quest_details.completed_msg=§a✔ Завершено!
+ads.ui.quest_details.progress_msg=§7Прогресс: §f%1/%2\n%3
+ads.ui.quest_details.title=§8§lДетали Квеста
+ads.ui.quest_details.btn_stop_tracking=§cОстановить Отслеживание
+ads.ui.quest_details.btn_track=§aОтслеживать Квест
+ads.ui.btn_back=§cНазад
+ads.ui.btn_close=§cЗакрыть
+
+ads.ui.quest_chains.title=§d§l🔗 Цепочки Квестов
+ads.ui.quest_chains.empty=§7Цепочки квестов пока недоступны.
+ads.ui.quest_chains.completed_count=§7Сюжетные линии квестов.\n§d§lВыполнено: §f%1/%2\n
+
+ads.ui.chain_detail.desc=§6§l%1\n§7%2\n§8Сюжет: %3\n\n
+ads.ui.chain_detail.progress=§fПрогресс: %1 §f%2/%3\n\n
+ads.ui.chain_detail.order=§e§lПорядок:\n
+ads.ui.chain_detail.complete=\n§a§l✔ Цепочка Завершена!
+ads.ui.chain_detail.bonus= §d(+%1 бонус очк.)
+ads.ui.chain_detail.current=\n§eТекущий: §f%1
+ads.ui.chain_detail.title=§d§l🔗 %1
+ads.ui.chain_detail.btn_back=§cК Цепочкам
+
+ads.ui.achievements.title=§e§lХранилище Достижений
+ads.ui.achievements.overall=§e§lВсего: §f%1/%2 §8(%3%%)\n
+ads.ui.achievements.visible_hidden=§7Видимые: §f%1 §8| §7Скрытые: §f%2\n
+ads.ui.achievements.closest=\n§a§lБлижайшие\n
+ads.ui.achievements.closest_desc=%1 §f%2 §8- §7%3/%4 §8(%5%%)\n
+ads.ui.achievements.all_complete=\n§aВсе видимые достижения открыты. Могут оставаться скрытые.\n
+ads.ui.achievements.cat_desc=§f%1\n§7%2/%3 открыто §8| §e%4%%
+
+ads.ui.achievement_category.progress=§e§l%1\n§7Прогресс: §f%2/%3 §8(%4%%)\n
+ads.ui.achievement_category.unlocked=%1 §a%2\n  §7%3\n  §d+%4 очк. §a✔ Открыто\n\n
+ads.ui.achievement_category.hidden=§8§l? §7??? §8(Скрыто)\n  §8Выполните, чтобы открыть\n\n
+ads.ui.achievement_category.locked=%1 §7%2\n  §7%3\n  %4 §f%5/%6 §8| §d%7 очк.\n  §8%8 осталось\n\n
+ads.ui.achievement_category.title=§e§l%1 Достижения
+ads.ui.achievement_category.btn_back=§aК Достижениям
+
+ads.ui.leaderboard.header=§3§lТАБЛИЦА ЛИДЕРОВ\n§8────────────────────────\n
+ads.ui.leaderboard.desc=§7По очкам и завершенным квестам.\n
+ads.ui.leaderboard.players=§7Показано: §f%1 §8| §7Онлайн: §b%2\n\n
+ads.ui.leaderboard.empty=§7Нет данных.
+ads.ui.leaderboard.entry=%1 §f%2%3\n   §d%4 очк. §8| §a%5 кв. §8| §e%6/%7 дост.
+ads.ui.leaderboard.entry_streak= §8| §6%1d серия\n\n
+ads.ui.leaderboard.hidden_profiles=§8%1 скрытых профилей.\n\n
+ads.ui.leaderboard.your_stats=\n\n§6§lТвоя Статистика:\n
+ads.ui.leaderboard.rank=§fРанг: §e%1\n
+ads.ui.leaderboard.unranked=§fРанг: §eБез ранга\n
+ads.ui.leaderboard.wallet=§dОчки: §f%1\n
+ads.ui.leaderboard.quests_completed=§aВыполнено: §f%1 кв.\n
+ads.ui.leaderboard.ach_count=§eДостижения: §f%1/%2\n
+ads.ui.leaderboard.best_streak=§6Лучшая серия: §f%1 дн.
+ads.ui.leaderboard.title=§3§lТаблица Лидеров

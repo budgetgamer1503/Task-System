@@ -1,0 +1,38 @@
+{
+	"type": "minecraftBedrock",
+	"name": "Task System",
+	"namespace": "bridge",
+	"authors": [
+		"BudgetGamer1503"
+	],
+	"targetVersion": "1.21.100",
+	"description": "A System in which you can assign tasks",
+	"experimentalGameplay": {},
+	"bdsProject": false,
+	"packs": {
+		"behaviorPack": "./BP",
+		"resourcePack": "./RP"
+	},
+	"worlds": [
+		"./worlds/*"
+	],
+	"compiler": {
+		"plugins": [
+			"generatorScripts",
+			"typeScript",
+			"entityIdentifierAlias",
+			"customEntityComponents",
+			"customItemComponents",
+			"customBlockComponents",
+			"customCommands",
+			"moLang",
+			"formatVersionCorrection",
+			[
+				"simpleRewrite",
+				{
+					"packName": "Task System"
+				}
+			]
+		]
+	}
+}

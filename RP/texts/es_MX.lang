@@ -1,0 +1,74 @@
+item.ads:vanilla_quest.name=§6Libro de Misiones
+item.ads:vanilla_quest.tooltip=§7Clic derecho para abrir el Sistema de Misiones v3.0\n§d§oPuntos • Tienda • Repetible • Con tiempo\n§7§oCreativo/Admin: Crear y gestionar misiones\n§7§oSupervivencia: Ver misiones, tienda y clasificación\n\n\nads.ui.quest_log.title=§6§lLibro de Misiones §r§7v3.0
+ads.ui.quest_log.body=§7Usa /tag @s add admin para gestionar las misiones.\n\n§d§lPuntos: §f%1 §8| §a§lCompletado: §f%2/%3\n§7Progreso: %4 §f%5%%\n§e🏆 Logros: §f%6/%7
+ads.ui.quest_log.streak= §8| §6🔥 %1 días de racha
+ads.ui.prefix.locked=§8[Bloqueado] 
+ads.ui.prefix.cooldown=§c[Enfriamiento] 
+ads.ui.prefix.done=§a[Hecho] 
+ads.ui.prefix.tracked=§6[RASTREADO] 
+ads.ui.quest_btn.points=\n§7%1 §8| §d%2pts
+ads.ui.quest_log.btn_chains=§d🔗 Cadenas de Misiones
+ads.ui.quest_log.btn_achievements=§e🏆 Logros
+ads.ui.quest_log.btn_leaderboard=§3Clasificación
+ads.ui.quest_log.btn_shop=§6Tienda de Misiones
+
+ads.ui.quest_details.header=§6%1\n§7%2\n§8Tipo: %3\n\n§f%4\n\n
+ads.ui.quest_details.points=§dPuntos: §f%1
+ads.ui.quest_details.repeatable=  §d§l⟳ Repetible
+ads.ui.quest_details.first_time=  §e(+%1 primera vez)
+ads.ui.quest_details.chain=§8🔗 Cadena: §7%1 §8(%2/%3)\n
+ads.ui.quest_details.time_remaining=§c⏰ Tiempo Restante: §f%1\n
+ads.ui.quest_details.random_bonus=§e🎲 Tiene recompensa de bonificación aleatoria\n
+ads.ui.quest_details.locked=§c⚠ ¡Bloqueado! Completa "%1" primero.
+ads.ui.quest_details.cooldown=§c⏳ En Enfriamiento: §f%1\n§7Esta misión se reiniciará cuando expire el tiempo de enfriamiento.
+ads.ui.quest_details.completed_msg=§a✔ ¡Completado!
+ads.ui.quest_details.progress_msg=§7Progreso: §f%1/%2\n%3
+ads.ui.quest_details.title=§8§lDetalles de la Misión
+ads.ui.quest_details.btn_stop_tracking=§cDejar de Rastrear
+ads.ui.quest_details.btn_track=§aRastrear Misión
+ads.ui.btn_back=§cVolver
+ads.ui.btn_close=§cCerrar
+
+ads.ui.quest_chains.title=§d§l🔗 Cadenas de Misiones
+ads.ui.quest_chains.empty=§7No hay cadenas de misiones disponibles aún.
+ads.ui.quest_chains.completed_count=§7Historias de misiones ordenadas.\n§d§lCompletado: §f%1/%2\n
+
+ads.ui.chain_detail.desc=§6§l%1\n§7%2\n§8Arco: %3\n\n
+ads.ui.chain_detail.progress=§fProgreso: %1 §f%2/%3\n\n
+ads.ui.chain_detail.order=§e§lOrden de la Misión:\n
+ads.ui.chain_detail.complete=\n§a§l✔ ¡Cadena Completada!
+ads.ui.chain_detail.bonus= §d(+%1 pts de bonificación)
+ads.ui.chain_detail.current=\n§eActual: §f%1
+ads.ui.chain_detail.title=§d§l🔗 %1
+ads.ui.chain_detail.btn_back=§cVolver a Cadenas
+
+ads.ui.achievements.title=§e§lBóveda de Logros
+ads.ui.achievements.overall=§e§lEn general: §f%1/%2 §8(%3%%)\n
+ads.ui.achievements.visible_hidden=§7Bloqueado visible: §f%1 §8| §7Oculto encontrado: §f%2\n
+ads.ui.achievements.closest=\n§a§lDesbloqueo más cercano\n
+ads.ui.achievements.closest_desc=%1 §f%2 §8- §7%3/%4 §8(%5%%)\n
+ads.ui.achievements.all_complete=\n§aTodos los logros visibles están completos. Aún pueden quedar logros ocultos.\n
+ads.ui.achievements.cat_desc=§f%1\n§7%2/%3 desbloqueado §8| §e%4%%
+
+ads.ui.achievement_category.progress=§e§l%1\n§7Progreso de categoría: §f%2/%3 §8(%4%%)\n
+ads.ui.achievement_category.unlocked=%1 §a%2\n  §7%3\n  §d+%4 pts §a✔ Desbloqueado\n\n
+ads.ui.achievement_category.hidden=§8§l? §7??? §8(Oculto)\n  §8Completa para revelar\n\n
+ads.ui.achievement_category.locked=%1 §7%2\n  §7%3\n  %4 §f%5/%6 §8| §d%7 pts\n  §8%8 más necesario\n\n
+ads.ui.achievement_category.title=§e§l%1 Logros
+ads.ui.achievement_category.btn_back=§aVolver a Logros
+
+ads.ui.leaderboard.header=§3§lCLASIFICACIÓN DE MISIONES\n§8────────────────────────\n
+ads.ui.leaderboard.desc=§7Clasificado por puntos de cartera, luego por misiones completadas.\n
+ads.ui.leaderboard.players=§7Jugadores mostrados: §f%1 §8| §7En línea: §b%2\n\n
+ads.ui.leaderboard.empty=§7Aún no se han cargado datos de jugadores.
+ads.ui.leaderboard.entry=%1 §f%2%3\n   §d%4 pts §8| §a%5 misiones §8| §e%6/%7 logros
+ads.ui.leaderboard.entry_streak= §8| §6%1d racha\n\n
+ads.ui.leaderboard.hidden_profiles=§8%1 más perfiles guardados ocultos.\n\n
+ads.ui.leaderboard.your_stats=\n\n§6§lTus Estadísticas:\n
+ads.ui.leaderboard.rank=§fRango: §e%1\n
+ads.ui.leaderboard.unranked=§fRango: §eSin rango\n
+ads.ui.leaderboard.wallet=§dPuntos de Cartera: §f%1\n
+ads.ui.leaderboard.quests_completed=§aCompletado: §f%1 misiones\n
+ads.ui.leaderboard.ach_count=§eLogros: §f%1/%2\n
+ads.ui.leaderboard.best_streak=§6Mejor Racha: §f%1 días
+ads.ui.leaderboard.title=§3§lClasificación

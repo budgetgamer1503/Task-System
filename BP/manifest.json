@@ -1,0 +1,63 @@
+{
+	"format_version": 2,
+	"metadata": {
+		"authors": [
+			"BudgetGamer1503"
+		]
+	},
+	"header": {
+		"name": "Task System",
+		"description": "Quest Engine v3.0 — Chains, Achievements, Advanced Rewards & More",
+		"min_engine_version": [
+			1,
+			21,
+			0
+		],
+		"uuid": "1d6a808a-004a-4498-95fd-dfa7b0eccef2",
+		"version": [
+			3,
+			0,
+			0
+		]
+	},
+	"modules": [
+		{
+			"type": "data",
+			"uuid": "5840df1c-b9c3-43dc-ae96-e77ff802bdac",
+			"version": [
+				3,
+				0,
+				0
+			]
+		},
+		{
+			"type": "script",
+			"language": "javascript",
+			"uuid": "f1c14da7-e251-443d-930c-75705e367707",
+			"entry": "scripts/main.js",
+			"version": [
+				3,
+				0,
+				0
+			]
+		}
+	],
+	"dependencies": [
+		{
+			"uuid": "ed39d6b4-99ea-41e3-b9fb-96eade27e6a5",
+			"version": [
+				3,
+				0,
+				0
+			]
+		},
+		{
+			"module_name": "@minecraft/server",
+			"version": "2.5.0"
+		},
+		{
+			"module_name": "@minecraft/server-ui",
+			"version": "2.0.0"
+		}
+	]
+}

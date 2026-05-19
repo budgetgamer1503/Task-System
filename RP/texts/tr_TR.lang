@@ -1,0 +1,75 @@
+item.ads:vanilla_quest.name=§6Görev Kitabı
+item.ads:vanilla_quest.tooltip=§7Görev Sistemi v3.0'ı açmak için sağ tıklayın\n§d§oPuanlar • Mağaza • Tekrarlanabilir • Süreli\n§7§oYaratıcı/Admin: Görev oluştur ve yönet\n§7§oHayatta Kalma: Görevleri, mağazayı ve liderlik tablosunu gör\n
+ads.ui.quest_log.title=§6§lQuest Log §r§7v3.0
+ads.ui.quest_log.body=§7Use /tag @s add admin to manage quests.\n\n§d§lPoints: §f%1 §8| §a§lCompleted: §f%2/%3\n§7Progress: %4 §f%5%%\n§e🏆 Achievements: §f%6/%7
+ads.ui.quest_log.streak= §8| §6🔥 %1-day streak
+ads.ui.prefix.locked=§8[Locked] 
+ads.ui.prefix.cooldown=§c[Cooldown] 
+ads.ui.prefix.done=§a[Done] 
+ads.ui.prefix.tracked=§6[TRACKED] 
+ads.ui.quest_btn.points=\n§7%1 §8| §d%2pts
+ads.ui.quest_log.btn_chains=§d🔗 Quest Chains
+ads.ui.quest_log.btn_achievements=§e🏆 Achievements
+ads.ui.quest_log.btn_leaderboard=§3Leaderboard
+ads.ui.quest_log.btn_shop=§6Quest Shop
+
+ads.ui.quest_details.header=§6%1\n§7%2\n§8Type: %3\n\n§f%4\n\n
+ads.ui.quest_details.points=§dPoints: §f%1
+ads.ui.quest_details.repeatable=  §d§l⟳ Repeatable
+ads.ui.quest_details.first_time=  §e(+%1 first time)
+ads.ui.quest_details.chain=§8🔗 Chain: §7%1 §8(%2/%3)\n
+ads.ui.quest_details.time_remaining=§c⏰ Time Remaining: §f%1\n
+ads.ui.quest_details.random_bonus=§e🎲 Has random bonus reward\n
+ads.ui.quest_details.locked=§c⚠ Locked! Complete "%1" first.
+ads.ui.quest_details.cooldown=§c⏳ On Cooldown: §f%1\n§7This quest will reset when cooldown expires.
+ads.ui.quest_details.completed_msg=§a✔ Completed!
+ads.ui.quest_details.progress_msg=§7Progress: §f%1/%2\n%3
+ads.ui.quest_details.title=§8§lQuest Details
+ads.ui.quest_details.btn_stop_tracking=§cStop Tracking
+ads.ui.quest_details.btn_track=§aTrack Quest
+ads.ui.btn_back=§cBack
+ads.ui.btn_close=§cClose
+
+ads.ui.quest_chains.title=§d§l🔗 Quest Chains
+ads.ui.quest_chains.empty=§7No quest chains available yet.
+ads.ui.quest_chains.completed_count=§7Ordered quest storylines.\n§d§lCompleted: §f%1/%2\n
+
+ads.ui.chain_detail.desc=§6§l%1\n§7%2\n§8Arc: %3\n\n
+ads.ui.chain_detail.progress=§fProgress: %1 §f%2/%3\n\n
+ads.ui.chain_detail.order=§e§lQuest Order:\n
+ads.ui.chain_detail.complete=\n§a§l✔ Chain Complete!
+ads.ui.chain_detail.bonus= §d(+%1 bonus pts)
+ads.ui.chain_detail.current=\n§eCurrent: §f%1
+ads.ui.chain_detail.title=§d§l🔗 %1
+ads.ui.chain_detail.btn_back=§cBack to Chains
+
+ads.ui.achievements.title=§e§lAchievement Vault
+ads.ui.achievements.overall=§e§lOverall: §f%1/%2 §8(%3%%)\n
+ads.ui.achievements.visible_hidden=§7Visible locked: §f%1 §8| §7Hidden found: §f%2\n
+ads.ui.achievements.closest=\n§a§lClosest Unlock\n
+ads.ui.achievements.closest_desc=%1 §f%2 §8- §7%3/%4 §8(%5%%)\n
+ads.ui.achievements.all_complete=\n§aAll visible achievements are complete. Hidden achievements may still remain.\n
+ads.ui.achievements.cat_desc=§f%1\n§7%2/%3 unlocked §8| §e%4%%
+
+ads.ui.achievement_category.progress=§e§l%1\n§7Category progress: §f%2/%3 §8(%4%%)\n
+ads.ui.achievement_category.unlocked=%1 §a%2\n  §7%3\n  §d+%4 pts §a✔ Unlocked\n\n
+ads.ui.achievement_category.hidden=§8§l? §7??? §8(Hidden)\n  §8Complete to reveal\n\n
+ads.ui.achievement_category.locked=%1 §7%2\n  §7%3\n  %4 §f%5/%6 §8| §d%7 pts\n  §8%8 more needed\n\n
+ads.ui.achievement_category.title=§e§l%1 Achievements
+ads.ui.achievement_category.btn_back=§aBack to Achievements
+
+ads.ui.leaderboard.header=§3§lQUEST LEADERBOARD\n§8────────────────────────\n
+ads.ui.leaderboard.desc=§7Ranked by wallet points, then completed quests.\n
+ads.ui.leaderboard.players=§7Players shown: §f%1 §8| §7Online: §b%2\n\n
+ads.ui.leaderboard.empty=§7No player data loaded yet.
+ads.ui.leaderboard.entry=%1 §f%2%3\n   §d%4 pts §8| §a%5 quests §8| §e%6/%7 ach
+ads.ui.leaderboard.entry_streak= §8| §6%1d streak\n\n
+ads.ui.leaderboard.hidden_profiles=§8%1 more saved profiles hidden.\n\n
+ads.ui.leaderboard.your_stats=\n\n§6§lYour Stats:\n
+ads.ui.leaderboard.rank=§fRank: §e%1\n
+ads.ui.leaderboard.unranked=§fRank: §eUnranked\n
+ads.ui.leaderboard.wallet=§dWallet Points: §f%1\n
+ads.ui.leaderboard.quests_completed=§aCompleted: §f%1 quests\n
+ads.ui.leaderboard.ach_count=§eAchievements: §f%1/%2\n
+ads.ui.leaderboard.best_streak=§6Best Streak: §f%1 days
+ads.ui.leaderboard.title=§3§lLeaderboard
