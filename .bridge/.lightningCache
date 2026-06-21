@@ -1,83 +1,76 @@
 $formatVersion: 1
 #manifest
-projects/Task System/BP/manifest.json|1776860649
+projects/Task System/BP/manifest.json|1781008888
 #unknown
 projects/Task System/BP/pack_icon.png|1756134185
 projects/Task System/RP/pack_icon.png|1763794746
 #gameTest
 projects/Task System/BP/scripts/achievement_manager.js|1776862148
-projects/Task System/BP/scripts/config.js|1776862148
+projects/Task System/BP/scripts/config.js|1782045016
 projects/Task System/BP/scripts/chain_manager.js|1776862148
-projects/Task System/BP/scripts/database.js|1776862148
-projects/Task System/BP/scripts/main.js|1777301970
-projects/Task System/BP/scripts/quest_manager.js|1776862148
+projects/Task System/BP/scripts/database.js|1782045052
+projects/Task System/BP/scripts/main.js|1782045573
+projects/Task System/BP/scripts/quest_manager.js|1782045092
 projects/Task System/BP/scripts/utils.js|1776862148
-projects/Task System/BP/scripts/ui/admin_ui.js|1779180571
-projects/Task System/BP/scripts/ui/player_ui.js|1779180523
-projects/Task System/BP/scripts/ui/shop_ui.js|1779180485
+projects/Task System/BP/scripts/ui/admin_ui.js|1782045137
+projects/Task System/BP/scripts/ui/player_ui.js|1782045112
+projects/Task System/BP/scripts/ui/shop_ui.js|1779181141
 #item
 projects/Task System/BP/items/vanilla_quest.json|1759823840|{"identifier":["ads:vanilla_quest"],"itemTexture":["vanilla_quest"],"tag":[]}
 #recipe
 projects/Task System/BP/recipes/vanilla_quest.json|1759823837|{"identifier":["ads:vanilla_quest"],"recipeTag":["crafting_table"],"itemIdentifier":["ads:vanilla_quest","minecraft:paper","minecraft:emerald","minecraft:book"]}
+#clientManifest
+projects/Task System/RP/manifest.json|1781008881|{"uuid":["ed39d6b4-99ea-41e3-b9fb-96eade27e6a5"]}
 #ui
 projects/Task System/RP/ui/custom_form.json|1777287636
-projects/Task System/RP/ui/server_form.json|1777302062
+projects/Task System/RP/ui/server_form.json|1777417644
 projects/Task System/RP/ui/_ui_defs.json|1777288155
-#clientManifest
-projects/Task System/RP/manifest.json|1776860651|{"uuid":["ed39d6b4-99ea-41e3-b9fb-96eade27e6a5"]}
 #texture
 projects/Task System/RP/textures/items/vanilla_quest.png|1763794746
-projects/Task System/RP/textures/ui/quest_accent_dot.png|1777131952
 projects/Task System/RP/textures/ui/custom_bg.png|1776861460
+projects/Task System/RP/textures/ui/quest_accent_dot.png|1777131952
 projects/Task System/RP/textures/ui/quest_button.png|1776861460
 projects/Task System/RP/textures/ui/quest_button_hover.png|1777288558
+projects/Task System/RP/textures/ui/quest_button_pressed.png|1776861460
 projects/Task System/RP/textures/ui/quest_card_bg.png|1777131952
 projects/Task System/RP/textures/ui/quest_close.png|1776861460
-projects/Task System/RP/textures/ui/quest_button_pressed.png|1776861460
 projects/Task System/RP/textures/ui/quest_divider.png|1776861460
 projects/Task System/RP/textures/ui/quest_header.png|1776861460
 projects/Task System/RP/textures/ui/quest_hint_a.png|1777300447
 projects/Task System/RP/textures/ui/quest_hint_b.png|1777300447
+projects/Task System/RP/textures/ui/quest_input_focus.png|1776861460
 projects/Task System/RP/textures/ui/quest_input.png|1776861460
 projects/Task System/RP/textures/ui/quest_list_row.png|1777131952
-projects/Task System/RP/textures/ui/quest_input_focus.png|1776861460
-projects/Task System/RP/textures/ui/quest_scroll_thumb.png|1776861460
 projects/Task System/RP/textures/ui/quest_list_row_hover.png|1777131952
-projects/Task System/RP/textures/ui/quest_scroll_track.png|1776861460
-projects/Task System/RP/textures/ui/quest_slider_track.png|1776861460
-projects/Task System/RP/textures/ui/quest_title_ribbon.png|1777131952
-projects/Task System/RP/textures/ui/toggle_off.png|1777288840
-projects/Task System/RP/textures/ui/quest_toggle_on.png|1776861460
-projects/Task System/RP/textures/ui/toggle_on_hover.png|1776861460
-projects/Task System/RP/textures/ui/quest_slider_fill.png|1776861460
-projects/Task System/RP/textures/ui/quest_slider_thumb.png|1776861460
 projects/Task System/RP/textures/ui/quest_panel.png|1776861460
+projects/Task System/RP/textures/ui/quest_scroll_thumb.png|1776861460
+projects/Task System/RP/textures/ui/quest_slider_thumb.png|1776861460
+projects/Task System/RP/textures/ui/toggle_off.png|1777288840
+projects/Task System/RP/textures/ui/quest_slider_track.png|1776861460
+projects/Task System/RP/textures/ui/quest_toggle_on.png|1776861460
+projects/Task System/RP/textures/ui/quest_title_ribbon.png|1777131952
+projects/Task System/RP/textures/ui/quest_scroll_track.png|1776861460
+projects/Task System/RP/textures/ui/quest_slider_fill.png|1776861460
 projects/Task System/RP/textures/ui/toggle_off_hover.png|1777288840
+projects/Task System/RP/textures/ui/toggle_on_hover.png|1776861460
 #clientLang
-projects/Task System/RP/texts/en_GB.lang|1779180622|{"actionText":[]}
-projects/Task System/RP/texts/uk_UA.lang|1779180622|{"actionText":[]}
-projects/Task System/RP/texts/ko_KR.lang|1779180622|{"actionText":[]}
-projects/Task System/RP/texts/bg_BG.lang|1779180622|{"actionText":[]}
-projects/Task System/RP/texts/pl_PL.lang|1779180622|{"actionText":[]}
-projects/Task System/RP/texts/ru_RU.lang|1779180926|{"actionText":[]}
-projects/Task System/RP/texts/en_US.lang|1779180622|{"actionText":[]}
-projects/Task System/RP/texts/sk_SK.lang|1779180622|{"actionText":[]}
-projects/Task System/RP/texts/nb_NO.lang|1779180622|{"actionText":[]}
-projects/Task System/RP/texts/ja_JP.lang|1779180622|{"actionText":[]}
-projects/Task System/RP/texts/es_MX.lang|1779180926|{"actionText":[]}
-projects/Task System/RP/texts/nl_NL.lang|1779180622|{"actionText":[]}
-projects/Task System/RP/texts/it_IT.lang|1779180622|{"actionText":[]}
-projects/Task System/RP/texts/id_ID.lang|1779180622|{"actionText":[]}
-projects/Task System/RP/texts/es_ES.lang|1779180926|{"actionText":[]}
-projects/Task System/RP/texts/de_DE.lang|1779180926|{"actionText":[]}
-projects/Task System/RP/texts/sv_SE.lang|1779180622|{"actionText":[]}
-projects/Task System/RP/texts/zh_CN.lang|1779180926|{"actionText":[]}
-projects/Task System/RP/texts/hu_HU.lang|1779180622|{"actionText":[]}
-projects/Task System/RP/texts/pt_BR.lang|1779180926|{"actionText":[]}
-projects/Task System/RP/texts/pt_PT.lang|1779180926|{"actionText":[]}
-projects/Task System/RP/texts/fr_CA.lang|1779180926|{"actionText":[]}
-projects/Task System/RP/texts/zh_TW.lang|1779180926|{"actionText":[]}
-projects/Task System/RP/texts/tr_TR.lang|1779180622|{"actionText":[]}
-projects/Task System/RP/texts/fr_FR.lang|1779180926|{"actionText":[]}
+projects/Task System/RP/texts/de_DE.lang|1781008370|{"actionText":[]}
+projects/Task System/RP/texts/en_US.lang|1779185570|{"actionText":[]}
+projects/Task System/RP/texts/bg_BG.lang|1781008367|{"actionText":[]}
+projects/Task System/RP/texts/en_GB.lang|1781008362|{"actionText":[]}
+projects/Task System/RP/texts/es_MX.lang|1781008385|{"actionText":[]}
+projects/Task System/RP/texts/es_ES.lang|1781008355|{"actionText":[]}
+projects/Task System/RP/texts/it_IT.lang|1781008365|{"actionText":[]}
+projects/Task System/RP/texts/fr_FR.lang|1781008493|{"actionText":[]}
+projects/Task System/RP/texts/fr_CA.lang|1781008365|{"actionText":[]}
+projects/Task System/RP/texts/ko_KR.lang|1781008380|{"actionText":[]}
+projects/Task System/RP/texts/ja_JP.lang|1781008392|{"actionText":[]}
+projects/Task System/RP/texts/zh_TW.lang|1781008374|{"actionText":[]}
+projects/Task System/RP/texts/tr_TR.lang|1781008457|{"actionText":[]}
+projects/Task System/RP/texts/pt_BR.lang|1781008438|{"actionText":[]}
+projects/Task System/RP/texts/nl_NL.lang|1781008357|{"actionText":[]}
+projects/Task System/RP/texts/zh_CN.lang|1781008408|{"actionText":[]}
+projects/Task System/RP/texts/pt_PT.lang|1781008388|{"actionText":[]}
+projects/Task System/RP/texts/ru_RU.lang|1781008401|{"actionText":[]}
 #itemTexture
 projects/Task System/RP/textures/item_texture.json|1763794746|{"texture":["vanilla_quest"],"texturePath":["projects/Task System/RP/textures/items/vanilla_quest.png"]}

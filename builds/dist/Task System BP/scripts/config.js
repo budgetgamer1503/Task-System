@@ -42,7 +42,8 @@ export const TYPES = {
     DEATH: 'death',
     FISH: 'fish',
     USE_ITEM: 'use_item',
-    PLACE: 'place'
+    PLACE: 'place',
+    APPROACH: 'approach'
 };
 export const ACHIEVEMENTS = [
     {

@@ -18,6 +18,7 @@ export class AdminUI {
             .button({ translate: 'ads.ui.admin.main.btn_manage' }, 'textures/items/book_written')
             .button({ translate: 'ads.ui.admin.main.btn_chains' }, 'textures/items/chain')
             .button({ translate: 'ads.ui.admin.main.btn_shop' }, 'textures/items/gold_ingot')
+            .button("§eDatabase Backups", "textures/items/diamond")
             .button({ translate: 'ads.ui.admin.main.btn_guide' }, 'textures/items/book_normal')
             .button({ translate: 'ads.ui.admin.main.btn_leaderboard' }, 'textures/items/spyglass')
             .button({ translate: 'ads.ui.admin.main.btn_stats' }, 'textures/items/clock_item')
@@ -31,10 +32,11 @@ export class AdminUI {
                         case 1: this.uiManageQuests(player); break;
                         case 2: this.uiManageChains(player); break;
                         case 3: this.router.openShopAdmin(player); break;
-                        case 4: this.uiShowGuide(player); break;
-                        case 5: this.router.openLeaderboard(player, 'admin'); break;
-                        case 6: this.uiAdminStats(player); break;
-                        case 7:
+                        case 4: this.uiDatabaseBackups(player); break;
+                        case 5: this.uiShowGuide(player); break;
+                        case 6: this.router.openLeaderboard(player, 'admin'); break;
+                        case 7: this.uiAdminStats(player); break;
+                        case 8:
                             const id = player.id;
                             this.db.playerData.delete(id);
                             try {
@@ -43,64 +45,171 @@ export class AdminUI {
                             } catch (e) { }
                             player.sendMessage({ translate: 'ads.ui.admin.main.data_reset' });
                             break;
-                        case 8: this.router.openPlayerLog(player); break;
+                        case 9: this.router.openPlayerLog(player); break;
                     }
                 });
             });
+    }
+
+    uiDatabaseBackups(player) {
+        const form = new ActionFormData().title("§e§lDatabase Backups");
+        let body = "§7Create or restore backup snapshots of all quest data (tasks, chains, and shop items).\n\n";
+        
+        const slot1Info = this.db.getBackupInfo(1);
+        const slot2Info = this.db.getBackupInfo(2);
+        const slot3Info = this.db.getBackupInfo(3);
+        
+        const getSlotText = (slotNum, info) => {
+            if (!info) return `Slot ${slotNum}: §8[Empty]`;
+            const dateStr = new Date(info.timestamp).toLocaleString();
+            return `Slot ${slotNum}: §a${dateStr}\n§7Tasks: ${info.tasksCount} | Chains: ${info.chainsCount} | Shop: ${info.shopCount}`;
+        };
+        
+        form.body(body);
+        form.button(getSlotText(1, slot1Info), "textures/items/diamond");
+        form.button(getSlotText(2, slot2Info), "textures/items/diamond");
+        form.button(getSlotText(3, slot3Info), "textures/items/diamond");
+        form.button("§cBack to Menu", "textures/ui/arrow_left");
+        
+        form.show(player).then(r => {
+            if (r.canceled) return;
+            system.run(() => {
+                if (r.selection === 3) {
+                    this.openMenu(player);
+                } else {
+                    const slotNum = r.selection + 1;
+                    const info = [slot1Info, slot2Info, slot3Info][r.selection];
+                    this.uiBackupSlotOptions(player, slotNum, info);
+                }
+            });
+        });
+    }
+
+    uiBackupSlotOptions(player, slotNum, info) {
+        const form = new ActionFormData().title(`Backup Slot ${slotNum}`);
+        form.body(info ? `§7Selected backup created on: §a${new Date(info.timestamp).toLocaleString()}` : "§7This backup slot is currently empty.");
+        
+        form.button("§aCreate Backup\n§7Overwrite this slot with live data", "textures/ui/plus");
+        if (info) {
+            form.button("§eRestore Backup\n§cOverwrites live data!", "textures/ui/refresh");
+            form.button("§cDelete Backup", "textures/ui/realms_red_x");
+        }
+        form.button("§7Back", "textures/ui/arrow_left");
+        
+        form.show(player).then(r => {
+            if (r.canceled) return;
+            system.run(() => {
+                if (r.selection === (info ? 3 : 1)) {
+                    this.uiDatabaseBackups(player);
+                } else if (r.selection === 0) {
+                    const success = this.db.backup(slotNum);
+                    if (success) player.sendMessage(`§a[Backups] Successfully backed up to Slot ${slotNum}!`);
+                    else player.sendMessage(`§c[Backups] Failed to create backup.`);
+                    this.uiDatabaseBackups(player);
+                } else if (r.selection === 1 && info) {
+                    new MessageFormData()
+                        .title("§c§lConfirm Restore")
+                        .body("§cWARNING! Restoring this backup will completely overwrite your current live quests, chains, and shop items with the backup state. This action cannot be undone.\n\nDo you want to proceed?")
+                        .button1("§aRestore Now")
+                        .button2("§cCancel")
+                        .show(player).then(res => {
+                            system.run(() => {
+                                if (res.selection === 0) {
+                                    const success = this.db.restore(slotNum);
+                                    if (success) player.sendMessage(`§a[Backups] Live database restored from Slot ${slotNum}!`);
+                                    else player.sendMessage(`§c[Backups] Failed to restore database.`);
+                                }
+                                this.uiDatabaseBackups(player);
+                            });
+                        });
+                } else if (r.selection === 2 && info) {
+                    this.db.clearBackup(slotNum);
+                    player.sendMessage(`§a[Backups] Deleted backup in Slot ${slotNum}.`);
+                    this.uiDatabaseBackups(player);
+                }
+            });
+        });
     }
 
     uiCreateQuest(player, editTask = null) {
         const allTasks = Array.from(this.db.tasks.values());
         const prereqOpts = ['None'];
         allTasks.forEach(t => prereqOpts.push(t.name));
+
+        const parseObjectives = (raw) => {
+            if (!raw || !raw.trim()) return null;
+            return raw.split(';').map(s => {
+                const parts = s.split(':');
+                if (parts.length < 3) return null;
+                const type = parts[0].trim();
+                const target = parts.slice(1, parts.length - 1).join(':').trim();
+                const req = Number(parts[parts.length - 1].trim());
+                return { type, target, req };
+            }).filter(o => o && o.type && o.target && !isNaN(o.req));
+        };
+
+        const formatObjectives = (objs) => {
+            if (!objs || objs.length === 0) return '';
+            return objs.map(o => `${o.type}:${o.target}:${o.req}`).join(';');
+        };
         
         new ModalFormData()
-            .title({ translate: editTask ? 'ads.ui.admin.create.title_edit' : 'ads.ui.admin.create.title_new' })
-            .textField({ translate: 'ads.ui.admin.create.lbl_name' }, { translate: 'ads.ui.admin.create.pl_name' }, { defaultValue: editTask?.name || '' })
-            .textField({ translate: 'ads.ui.admin.create.lbl_desc' }, { translate: 'ads.ui.admin.create.pl_desc' }, { defaultValue: editTask?.desc || '' })
-            .dropdown({ translate: 'ads.ui.admin.create.lbl_cat' }, Object.values(CATEGORIES), { defaultValueIndex: editTask ? Math.max(0, Object.values(CATEGORIES).indexOf(editTask.category)) : 0 })
-            .dropdown({ translate: 'ads.ui.admin.create.lbl_type' }, Object.values(TYPES), { defaultValueIndex: editTask ? Math.max(0, Object.values(TYPES).indexOf(editTask.type)) : 0 })
-            .textField({ translate: 'ads.ui.admin.create.lbl_target' }, { translate: 'ads.ui.admin.create.pl_target' }, { defaultValue: editTask?.targetRaw || (typeof editTask?.target === 'string' ? editTask.target : '') })
-            .slider({ translate: 'ads.ui.admin.create.lbl_req' }, 1, 100, { valueStep: 1, defaultValue: editTask?.req || 1 })
-            .dropdown({ translate: 'ads.ui.admin.create.lbl_prereq' }, prereqOpts, { defaultValueIndex: editTask?.prereq ? allTasks.findIndex(t => t.id === editTask.prereq) + 1 : 0 })
-            .textField({ translate: 'ads.ui.admin.create.lbl_cmds' }, { translate: 'ads.ui.admin.create.pl_cmds' }, { defaultValue: editTask?.rewards?.commands?.join(';') || editTask?.rewardCmd || '' })
-            .textField({ translate: 'ads.ui.admin.create.lbl_reward_txt' }, { translate: 'ads.ui.admin.create.pl_reward_txt' }, { defaultValue: editTask?.rewardTxt || '' })
-            .slider({ translate: 'ads.ui.admin.create.lbl_points' }, 1, 500, { valueStep: 1, defaultValue: editTask?.points || CONFIG.DEFAULT_QUEST_POINTS })
-            .toggle({ translate: 'ads.ui.admin.create.lbl_repeatable' }, { defaultValue: editTask?.repeatable || false })
-            .slider({ translate: 'ads.ui.admin.create.lbl_cooldown' }, 0, 3600, { valueStep: 30, defaultValue: editTask?.cooldownSec || CONFIG.DEFAULT_COOLDOWN })
-            .slider({ translate: 'ads.ui.admin.create.lbl_time_limit' }, 0, 1440, { valueStep: 5, defaultValue: editTask?.deadline ? Math.round((editTask.deadline - Date.now()) / 60000) : 0 })
-            .slider({ translate: 'ads.ui.admin.create.lbl_first_bonus' }, 0, 200, { valueStep: 5, defaultValue: editTask?.rewards?.firstTimeBonus || 0 })
-            .textField({ translate: 'ads.ui.admin.create.lbl_pool' }, { translate: 'ads.ui.admin.create.pl_pool' }, { defaultValue: editTask?.rewards?.pool?.join(';') || '' })
+            .title(editTask ? 'Edit Quest' : 'Create Quest')
+            .textField('Name', 'Name of the quest', { defaultValue: editTask?.name || '' })
+            .textField('Description', 'Quest description', { defaultValue: editTask?.desc || '' })
+            .dropdown('Category', Object.values(CATEGORIES), { defaultValueIndex: editTask ? Math.max(0, Object.values(CATEGORIES).indexOf(editTask.category)) : 0 })
+            .dropdown('Type', Object.values(TYPES), { defaultValueIndex: editTask ? Math.max(0, Object.values(TYPES).indexOf(editTask.type)) : 0 })
+            .textField('Target ID', 'Target ID (ignored if multi-objectives set)', { defaultValue: editTask?.targetRaw || (typeof editTask?.target === 'string' ? editTask.target : '') })
+            .slider('Required Count', 1, 1000, { valueStep: 1, defaultValue: editTask?.req || 1 })
+            .toggle("Co-Op Quest (Server-Wide)", { defaultValue: editTask?.coop || false })
+            .textField("Multi-Objectives (Optional)", "format: type:target:req; type:target:req", { defaultValue: formatObjectives(editTask?.objectives) })
+            .dropdown('Prerequisite', prereqOpts, { defaultValueIndex: editTask?.prereq ? allTasks.findIndex(t => t.id === editTask.prereq) + 1 : 0 })
+            .textField('Reward Commands', 'cmd1;cmd2;...', { defaultValue: editTask?.rewards?.commands?.join(';') || editTask?.rewardCmd || '' })
+            .textField('Reward Display Text', 'Display text for custom items', { defaultValue: editTask?.rewardTxt || '' })
+            .slider('Reward Points', 1, 1000, { valueStep: 1, defaultValue: editTask?.points || CONFIG.DEFAULT_QUEST_POINTS })
+            .toggle('Repeatable', { defaultValue: editTask?.repeatable || false })
+            .slider('Cooldown (Seconds)', 0, 86400, { valueStep: 30, defaultValue: editTask?.cooldownSec || CONFIG.DEFAULT_COOLDOWN })
+            .slider('Time Limit (Minutes)', 0, 1440, { valueStep: 5, defaultValue: editTask?.deadline ? Math.round((editTask.deadline - Date.now()) / 60000) : 0 })
+            .slider('First Time Completion Bonus', 0, 1000, { valueStep: 5, defaultValue: editTask?.rewards?.firstTimeBonus || 0 })
+            .textField('Random Rewards Pool', 'cmd1;cmd2;...', { defaultValue: editTask?.rewards?.pool?.join(';') || '' })
             .show(player).then(r => {
                 if (r.canceled) return;
-                const [name, desc, catIdx, typeIdx, targetRaw, req, preIdx,
+                const [name, desc, catIdx, typeIdx, targetRaw, req, coop, objectivesRaw, preIdx,
                     rewardCmdStr, rewardTxt, points, repeatable, cooldownSec,
                     timeLimitMin, firstTimeBonus, poolStr] = r.formValues;
+
                 if (!name || name.trim() === '') {
-                    player.sendMessage({ translate: 'ads.ui.admin.create.err_name' });
+                    player.sendMessage("Name cannot be empty!");
                     return;
                 }
+
                 const type = Object.values(TYPES)[typeIdx];
+                const objectives = parseObjectives(objectivesRaw);
                 let target = targetRaw;
-                if (type === TYPES.VISIT) {
-                    const [x, y, z] = targetRaw.split(',').map(Number);
-                    target = { x, y, z };
-                } else if (type === TYPES.WALK) {
-                    target = targetRaw.split(';').map(s => {
-                        const [x, y, z] = s.split(',').map(Number);
-                        return { x, y, z };
-                    });
+
+                if (!objectives) {
+                    if (type === TYPES.VISIT) {
+                        const [x, y, z] = targetRaw.split(',').map(Number);
+                        target = { x, y, z };
+                    } else if (type === TYPES.WALK) {
+                        target = targetRaw.split(';').map(s => {
+                            const [x, y, z] = s.split(',').map(Number);
+                            return { x, y, z };
+                        });
+                    }
                 }
+
                 const rewardCommands = rewardCmdStr ? rewardCmdStr.split(';').filter(s => s.trim()) : [];
                 const rewardPool = poolStr ? poolStr.split(';').filter(s => s.trim()) : [];
                 const id = editTask?.id || `q_${Date.now().toString(36)}`;
+                
                 const task = {
                     id,
                     active: editTask?.active ?? true,
                     name, desc,
                     category: Object.values(CATEGORIES)[catIdx],
                     type, target, targetRaw,
-                    req: (type === TYPES.VISIT) ? 1 : (type === TYPES.WALK ? target.length : req),
+                    req: objectives ? 1 : ((type === TYPES.VISIT) ? 1 : (type === TYPES.WALK ? target.length : req)),
                     prereq: preIdx === 0 ? null : allTasks[preIdx - 1].id,
                     rewardCmd: rewardCommands[0] || '',
                     rewardTxt: rewardTxt || 'None',
@@ -109,6 +218,8 @@ export class AdminUI {
                     cooldownSec: repeatable ? cooldownSec : 0,
                     deadline: timeLimitMin > 0 ? Date.now() + timeLimitMin * 60000 : null,
                     chainId: editTask?.chainId || null,
+                    coop,
+                    objectives,
                     rewards: {
                         commands: rewardCommands,
                         pool: rewardPool,
@@ -116,11 +227,11 @@ export class AdminUI {
                         firstTimeBonus: repeatable ? firstTimeBonus : 0
                     }
                 };
+
                 this.db.tasks.set(id, task);
                 this.db.saveTasks();
                 
-                let repeatKey = repeatable ? 'ads.ui.admin.create.msg_repeatable' : 'ads.ui.admin.create.msg_onetime';
-                player.sendMessage({ translate: editTask ? 'ads.ui.admin.create.msg_updated' : 'ads.ui.admin.create.msg_created', with: [name, String(points), String(firstTimeBonus), String(timeLimitMin), String(rewardPool.length), formatTime(cooldownSec)] });
+                player.sendMessage(`Quest "${name}" successfully saved!`);
             });
     }
 

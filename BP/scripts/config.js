@@ -5,6 +5,7 @@ export const CONFIG = {
     DB_KEY_PLAYERS: 'ts_data_players_v30',
     DB_KEY_SHOP: 'ts_data_shop_v30',
     DB_KEY_CHAINS: 'ts_data_chains_v30',
+    DB_KEY_PARTIES: 'ts_data_parties_v31',
     DB_KEY_TASKS_V25: 'ts_data_tasks_v25',
     DB_KEY_PLAYERS_V25: 'ts_data_players_v25',
     DB_KEY_SHOP_V25: 'ts_data_shop_v25',
@@ -13,6 +14,9 @@ export const CONFIG = {
     HUD_INTERVAL: 20,
     CRAFT_CHECK_INTERVAL: 40,
     LOCATION_CHECK_INTERVAL: 40,
+    POLLING_PLAYER_BUDGET: 4,
+    GUIDE_PARTICLE_INTERVAL: 30,
+    NPC_HIGHLIGHT_INTERVAL: 80,
     TIMED_QUEST_INTERVAL: 100,
     ACHIEVEMENT_CHECK_INTERVAL: 60,
     MAX_TASKS: 150,
@@ -21,6 +25,16 @@ export const CONFIG = {
     DEFAULT_QUEST_POINTS: 10,
     DEFAULT_COOLDOWN: 300,
     FIRST_TIME_BONUS: 0.5,
+    MAX_ACTIVE_QUESTS: 5,
+    MAX_PARTY_SIZE: 6,
+    PARTY_INVITE_SECONDS: 60,
+    COSMETICS: {
+        PROGRESS_SOUND: 'random.orb',
+        COMPLETE_SOUND: 'random.levelup',
+        TOAST_SOUND: 'random.toast',
+        GUIDE_PARTICLE: 'minecraft:basic_flame_particle',
+        NPC_PARTICLE: 'minecraft:villager_happy'
+    }
 };
 export const CATEGORIES = {
     MAIN: '§6Main Story',
@@ -42,7 +56,8 @@ export const TYPES = {
     DEATH: 'death',
     FISH: 'fish',
     USE_ITEM: 'use_item',
-    PLACE: 'place'
+    PLACE: 'place',
+    APPROACH: 'approach'
 };
 export const ACHIEVEMENTS = [
     {

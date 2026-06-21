@@ -9,12 +9,87 @@ export class Database {
         this.indices = { block: new Map(), mob: new Map(), craft: new Map(), place: new Map() };
         this.inventoryCache = new Map();
         this.saveDirty = new Set();
+        this.globalProgress = {};
+        this.globalCompleted = [];
     }
     load() {
         this.loadTasks();
         this.loadShop();
         this.loadChains();
+        try {
+            const rawGlobal = world.getDynamicProperty('ts_global_progress');
+            this.globalProgress = rawGlobal ? JSON.parse(rawGlobal) : {};
+        } catch (e) { this.globalProgress = {}; }
+        try {
+            const rawGlobalComp = world.getDynamicProperty('ts_global_completed');
+            this.globalCompleted = rawGlobalComp ? JSON.parse(rawGlobalComp) : [];
+        } catch (e) { this.globalCompleted = []; }
         console.log(`§a[QuestSystem] Database loaded: ${this.tasks.size} tasks, ${this.chains.size} chains, ${this.shop.size} shop items`);
+    }
+    saveGlobalProgress() {
+        try {
+            world.setDynamicProperty('ts_global_progress', JSON.stringify(this.globalProgress));
+        } catch (e) {}
+    }
+    saveGlobalCompleted() {
+        try {
+            world.setDynamicProperty('ts_global_completed', JSON.stringify(this.globalCompleted));
+        } catch (e) {}
+    }
+    backup(slot) {
+        try {
+            const meta = {
+                timestamp: Date.now(),
+                tasksCount: this.tasks.size,
+                chainsCount: this.chains.size,
+                shopCount: this.shop.size
+            };
+            world.setDynamicProperty(`ts_backup_slot_${slot}_meta`, JSON.stringify(meta));
+            world.setDynamicProperty(`ts_backup_slot_${slot}_tasks`, JSON.stringify(Array.from(this.tasks.values())));
+            world.setDynamicProperty(`ts_backup_slot_${slot}_chains`, JSON.stringify(Array.from(this.chains.values())));
+            world.setDynamicProperty(`ts_backup_slot_${slot}_shop`, JSON.stringify(Array.from(this.shop.values())));
+            return true;
+        } catch (e) {
+            console.warn(`Backup error slot ${slot}:`, e);
+            return false;
+        }
+    }
+    getBackupInfo(slot) {
+        try {
+            const raw = world.getDynamicProperty(`ts_backup_slot_${slot}_meta`);
+            return raw ? JSON.parse(raw) : null;
+        } catch (e) {
+            return null;
+        }
+    }
+    restore(slot) {
+        try {
+            const rawTasks = world.getDynamicProperty(`ts_backup_slot_${slot}_tasks`);
+            const rawChains = world.getDynamicProperty(`ts_backup_slot_${slot}_chains`);
+            const rawShop = world.getDynamicProperty(`ts_backup_slot_${slot}_shop`);
+            if (!rawTasks) return false;
+
+            world.setDynamicProperty(CONFIG.DB_KEY_TASKS, rawTasks);
+            if (rawChains) world.setDynamicProperty(CONFIG.DB_KEY_CHAINS, rawChains);
+            if (rawShop) world.setDynamicProperty(CONFIG.DB_KEY_SHOP, rawShop);
+
+            this.load();
+            return true;
+        } catch (e) {
+            console.warn(`Restore error slot ${slot}:`, e);
+            return false;
+        }
+    }
+    clearBackup(slot) {
+        try {
+            world.setDynamicProperty(`ts_backup_slot_${slot}_meta`, undefined);
+            world.setDynamicProperty(`ts_backup_slot_${slot}_tasks`, undefined);
+            world.setDynamicProperty(`ts_backup_slot_${slot}_chains`, undefined);
+            world.setDynamicProperty(`ts_backup_slot_${slot}_shop`, undefined);
+            return true;
+        } catch (e) {
+            return false;
+        }
     }
     loadTasks() {
         try {
@@ -94,22 +169,33 @@ export class Database {
         if (!task.active) return;
         const addIndex = (map, key, id) => {
             const list = map.get(key) || [];
-            list.push(id);
+            if (!list.includes(id)) {
+                list.push(id);
+            }
             map.set(key, list);
         };
-        switch (task.type) {
-            case TYPES.BLOCK:
-                addIndex(this.indices.block, task.target, task.id);
-                break;
-            case TYPES.KILL:
-                addIndex(this.indices.mob, task.target, task.id);
-                break;
-            case TYPES.CRAFT:
-                addIndex(this.indices.craft, task.target, task.id);
-                break;
-            case TYPES.PLACE:
-                addIndex(this.indices.place, task.target, task.id);
-                break;
+        const indexSingle = (type, target, id) => {
+            switch (type) {
+                case TYPES.BLOCK:
+                    addIndex(this.indices.block, target, id);
+                    break;
+                case TYPES.KILL:
+                    addIndex(this.indices.mob, target, id);
+                    break;
+                case TYPES.CRAFT:
+                    addIndex(this.indices.craft, target, id);
+                    break;
+                case TYPES.PLACE:
+                    addIndex(this.indices.place, target, id);
+                    break;
+            }
+        };
+        if (task.objectives && task.objectives.length > 0) {
+            task.objectives.forEach(obj => {
+                indexSingle(obj.type, obj.target, task.id);
+            });
+        } else {
+            indexSingle(task.type, task.target, task.id);
         }
     }
     rebuildIndices() {
@@ -152,6 +238,7 @@ export class Database {
             progress: {},
             completed: [],
             tracked: null,
+            activeQuests: [],
             stats: {
                 kills: 0,
                 tasksCompleted: 0,
@@ -179,6 +266,7 @@ export class Database {
     ensurePlayerFields(data) {
         if (data.points === undefined) data.points = 0;
         if (data.repeatCooldowns === undefined) data.repeatCooldowns = {};
+        if (data.activeQuests === undefined) data.activeQuests = [];
         if (!data.stats) data.stats = {};
         const s = data.stats;
         if (s.tasks !== undefined && s.tasksCompleted === undefined) {

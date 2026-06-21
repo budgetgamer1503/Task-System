@@ -22,7 +22,7 @@ export class QuestManager {
             this.achievements.checkForStat(ev.player, 'blocksBroken');
             const tasksForBlock = this.db.indices.block.get(ev.brokenBlockPermutation.type.id);
             if (tasksForBlock) {
-                tasksForBlock.forEach(taskId => this.progressTask(ev.player, taskId, 1));
+                tasksForBlock.forEach(taskId => this.progressTask(ev.player, taskId, 1, TYPES.BLOCK, ev.brokenBlockPermutation.type.id));
             }
         });
         world.afterEvents.playerPlaceBlock.subscribe(ev => {
@@ -32,7 +32,7 @@ export class QuestManager {
             this.achievements.checkForStat(ev.player, 'blocksPlaced');
             const tasksForPlace = this.db.indices.place.get(ev.block.typeId);
             if (tasksForPlace) {
-                tasksForPlace.forEach(taskId => this.progressTask(ev.player, taskId, 1));
+                tasksForPlace.forEach(taskId => this.progressTask(ev.player, taskId, 1, TYPES.PLACE, ev.block.typeId));
             }
         });
         world.afterEvents.entityDie.subscribe(ev => {
@@ -44,7 +44,7 @@ export class QuestManager {
             this.achievements.checkForStat(player, 'kills');
             const tasksForMob = this.db.indices.mob.get(ev.deadEntity.typeId);
             if (tasksForMob) {
-                tasksForMob.forEach(taskId => this.progressTask(player, taskId, 1));
+                tasksForMob.forEach(taskId => this.progressTask(player, taskId, 1, TYPES.KILL, ev.deadEntity.typeId));
             }
         });
         world.afterEvents.entityDie.subscribe(ev => {
@@ -55,8 +55,8 @@ export class QuestManager {
             this.db.markDirty(player.id);
             this.achievements.checkForStat(player, 'deaths');
             this.db.tasks.forEach(task => {
-                if (task.active && task.type === TYPES.DEATH) {
-                    this.progressTask(player, task.id, 1);
+                if (task.active) {
+                    this.progressTask(player, task.id, 1, TYPES.DEATH, '');
                 }
             });
         });
@@ -64,8 +64,8 @@ export class QuestManager {
             if (ev.itemStack.typeId === 'minecraft:fishing_rod') {
             }
             this.db.tasks.forEach(task => {
-                if (task.active && task.type === TYPES.USE_ITEM && task.target === ev.itemStack.typeId) {
-                    this.progressTask(ev.source, task.id, 1);
+                if (task.active) {
+                    this.progressTask(ev.source, task.id, 1, TYPES.USE_ITEM, ev.itemStack.typeId);
                 }
             });
             const data = this.db.getPlayer(ev.source.id);
@@ -110,7 +110,7 @@ export class QuestManager {
                             const diff = newCount - oldCount;
                             const tasksForCraft = this.db.indices.craft.get(itemId);
                             if (tasksForCraft) {
-                                tasksForCraft.forEach(taskId => this.progressTask(player, taskId, diff));
+                                tasksForCraft.forEach(taskId => this.progressTask(player, taskId, diff, TYPES.CRAFT, itemId));
                                 const data = this.db.getPlayer(player.id);
                                 data.stats.itemsCrafted += diff;
                                 this.db.markDirty(player.id);
@@ -118,8 +118,8 @@ export class QuestManager {
                             }
                             if (this.isFishItem(itemId)) {
                                 this.db.tasks.forEach(task => {
-                                    if (task.active && task.type === TYPES.FISH && task.target === itemId) {
-                                        this.progressTask(player, task.id, diff);
+                                    if (task.active) {
+                                        this.progressTask(player, task.id, diff, TYPES.FISH, itemId);
                                     }
                                 });
                                 const data = this.db.getPlayer(player.id);
@@ -176,25 +176,50 @@ export class QuestManager {
                             player.onScreenDisplay.setActionBar(`§c§lCOOLDOWN: §e${task.name}\n§7Available in §f${formatTime(remaining)}`);
                             return;
                         }
-                        if (task.type === TYPES.GATHER || task.type === TYPES.LEVEL) {
+                        if (task.type === TYPES.GATHER || task.type === TYPES.LEVEL || task.objectives) {
                             this.checkPassiveTasks(player, task, data);
                         }
-                        const current = data.progress[task.id] || 0;
-                        const max = task.req;
-                        const bar = getProgressBar(current, max);
-                        let hudText = `§6§lQUEST: §e${task.name}\n${bar} §f${current}/${max}`;
-                        if (task.deadline) {
-                            const timeLeft = Math.max(0, Math.ceil((task.deadline - Date.now()) / 1000));
-                            hudText += `  §c⏰${formatTime(timeLeft)}`;
-                        }
-                        hudText += `  §d+${task.points || 0}pts`;
-                        if (task.chainId) {
-                            const chain = this.db.chains.get(task.chainId);
-                            if (chain) {
-                                hudText += `\n§8Chain: §7${chain.name}`;
+                        if (task.coop) {
+                            let hudText = `§3§l[CO-OP] §e${task.name}\n`;
+                            if (task.objectives && task.objectives.length > 0) {
+                                if (!this.db.globalProgress[task.id]) {
+                                    this.db.globalProgress[task.id] = task.objectives.map(() => 0);
+                                }
+                                hudText += task.objectives.map((obj, idx) => `§7${obj.target.replace('minecraft:', '')}: §f${this.db.globalProgress[task.id][idx] || 0}/${obj.req}`).join(' §8| ');
+                            } else {
+                                const current = this.db.globalProgress[task.id] || 0;
+                                const max = task.req;
+                                const bar = getProgressBar(current, max);
+                                hudText += `${bar} §f${current}/${max}`;
                             }
+                            player.onScreenDisplay.setActionBar(hudText);
+                            return;
                         }
-                        player.onScreenDisplay.setActionBar(hudText);
+                        if (task.objectives && task.objectives.length > 0) {
+                            if (!Array.isArray(data.progress[task.id])) {
+                                data.progress[task.id] = task.objectives.map(() => 0);
+                            }
+                            let hudText = `§6§lQUEST: §e${task.name}\n`;
+                            hudText += task.objectives.map((obj, idx) => `§7${obj.target.replace('minecraft:', '')}: §f${data.progress[task.id][idx] || 0}/${obj.req}`).join(' §8| ');
+                            player.onScreenDisplay.setActionBar(hudText);
+                        } else {
+                            const current = data.progress[task.id] || 0;
+                            const max = task.req;
+                            const bar = getProgressBar(current, max);
+                            let hudText = `§6§lQUEST: §e${task.name}\n${bar} §f${current}/${max}`;
+                            if (task.deadline) {
+                                const timeLeft = Math.max(0, Math.ceil((task.deadline - Date.now()) / 1000));
+                                hudText += `  §c⏰${formatTime(timeLeft)}`;
+                            }
+                            hudText += `  §d+${task.points || 0}pts`;
+                            if (task.chainId) {
+                                const chain = this.db.chains.get(task.chainId);
+                                if (chain) {
+                                    hudText += `\n§8Chain: §7${chain.name}`;
+                                }
+                            }
+                            player.onScreenDisplay.setActionBar(hudText);
+                        }
                     } else {
                         data.tracked = null;
                         this.db.savePlayer(player.id);
@@ -221,58 +246,218 @@ export class QuestManager {
         if (changed) this.db.savePlayer(playerId);
     }
     checkPassiveTasks(player, task, data) {
-        let amount = 0;
-        if (task.type === TYPES.GATHER) {
-            const inv = player.getComponent('minecraft:inventory')?.container;
-            if (inv) {
-                for (let i = 0; i < inv.size; i++) {
-                    if (inv.getItem(i)?.typeId === task.target) amount += inv.getItem(i).amount;
-                }
+        if (!task.coop && (!data.activeQuests || !data.activeQuests.includes(task.id))) return;
+        if (task.objectives && task.objectives.length > 0) {
+            if (!Array.isArray(data.progress[task.id])) {
+                data.progress[task.id] = task.objectives.map(() => 0);
             }
-        } else if (task.type === TYPES.LEVEL) {
-            amount = player.level;
-        }
-        if (amount !== (data.progress[task.id] || 0)) {
-            data.progress[task.id] = Math.min(amount, task.req);
-            this.db.savePlayer(player.id);
-            if (amount >= task.req) this.completeTask(player, task);
+            let changed = false;
+            task.objectives.forEach((obj, idx) => {
+                if (obj.type === TYPES.GATHER) {
+                    let amount = 0;
+                    const inv = player.getComponent('minecraft:inventory')?.container;
+                    if (inv) {
+                        for (let i = 0; i < inv.size; i++) {
+                            if (inv.getItem(i)?.typeId === obj.target) amount += inv.getItem(i).amount;
+                        }
+                    }
+                    if (amount !== data.progress[task.id][idx]) {
+                        data.progress[task.id][idx] = Math.min(amount, obj.req);
+                        changed = true;
+                    }
+                } else if (obj.type === TYPES.LEVEL) {
+                    let amount = player.level;
+                    if (amount !== data.progress[task.id][idx]) {
+                        data.progress[task.id][idx] = Math.min(amount, obj.req);
+                        changed = true;
+                    }
+                }
+            });
+            if (changed) {
+                this.db.savePlayer(player.id);
+                const allDone = task.objectives.every((obj, idx) => (data.progress[task.id][idx] || 0) >= obj.req);
+                if (allDone) this.completeTask(player, task);
+            }
+        } else {
+            let amount = 0;
+            if (task.type === TYPES.GATHER) {
+                const inv = player.getComponent('minecraft:inventory')?.container;
+                if (inv) {
+                    for (let i = 0; i < inv.size; i++) {
+                        if (inv.getItem(i)?.typeId === task.target) amount += inv.getItem(i).amount;
+                    }
+                }
+            } else if (task.type === TYPES.LEVEL) {
+                amount = player.level;
+            }
+            if (amount !== (data.progress[task.id] || 0)) {
+                data.progress[task.id] = Math.min(amount, task.req);
+                this.db.savePlayer(player.id);
+                if (amount >= task.req) this.completeTask(player, task);
+            }
         }
     }
     checkLocations(player) {
         this.db.tasks.forEach(task => {
             if (!task.active) return;
-            if (task.type !== TYPES.VISIT && task.type !== TYPES.WALK) return;
+            if (task.type !== TYPES.VISIT && task.type !== TYPES.WALK && task.type !== TYPES.APPROACH && !task.objectives) return;
             if (task.prereq && !this.isCompleted(player, task.prereq)) return;
             if (this.isCompleted(player, task.id)) return;
-            const pPos = player.location;
-            if (task.type === TYPES.VISIT) {
-                if (dist(pPos, task.target) <= CONFIG.PROXIMITY) this.completeTask(player, task);
-            } else if (task.type === TYPES.WALK) {
-                const progress = this.getProgress(player, task.id);
-                const targetPoint = task.target[progress];
-                if (targetPoint && dist(pPos, targetPoint) <= CONFIG.PROXIMITY) {
-                    this.progressTask(player, task.id, 1);
+            
+            const data = this.db.getPlayer(player.id);
+            if (!task.coop && (!data.activeQuests || !data.activeQuests.includes(task.id))) return;
+
+            const checkSingle = (type, target, req, idx = -1) => {
+                if (type === TYPES.APPROACH) {
+                    try {
+                        const entities = player.dimension.getEntities({
+                            location: player.location,
+                            maxDistance: CONFIG.PROXIMITY || 6
+                        });
+                        const match = entities.find(e => e.typeId === target);
+                        if (match) return true;
+                    } catch (e) {}
+                } else if (type === TYPES.VISIT) {
+                    if (dist(player.location, target) <= CONFIG.PROXIMITY) return true;
+                } else if (type === TYPES.WALK) {
+                    let progress = 0;
+                    if (idx !== -1 && Array.isArray(data.progress[task.id])) {
+                        progress = data.progress[task.id][idx] || 0;
+                    } else {
+                        progress = data.progress[task.id] || 0;
+                    }
+                    const targetPoint = target[progress];
+                    if (targetPoint && dist(player.location, targetPoint) <= CONFIG.PROXIMITY) return true;
+                }
+                return false;
+            };
+
+            if (task.objectives && task.objectives.length > 0) {
+                task.objectives.forEach((obj, idx) => {
+                    if (obj.type === TYPES.VISIT || obj.type === TYPES.APPROACH || obj.type === TYPES.WALK) {
+                        if (checkSingle(obj.type, obj.target, obj.req, idx)) {
+                            this.progressTask(player, task.id, 1, obj.type, obj.target);
+                        }
+                    }
+                });
+            } else {
+                if (checkSingle(task.type, task.target, task.req)) {
+                    this.progressTask(player, task.id, 1, task.type, task.target);
                 }
             }
         });
     }
-    progressTask(player, taskId, amount) {
+    progressTask(player, taskId, amount, targetType = null, targetId = null) {
         const task = this.db.tasks.get(taskId);
         if (!task || !task.active) return;
         if (this.isCompleted(player, taskId)) return;
         if (task.prereq && !this.isCompleted(player, task.prereq)) return;
         const data = this.db.getPlayer(player.id);
+        if (!task.coop && (!data.activeQuests || !data.activeQuests.includes(taskId))) return;
         const cdEnd = data.repeatCooldowns[taskId];
         if (cdEnd && Date.now() < cdEnd) return;
-        const current = data.progress[taskId] || 0;
-        const newVal = current + amount;
-        data.progress[taskId] = newVal;
+        if (!targetType) targetType = task.type;
+        if (!targetId) targetId = task.target;
+
         if (Math.random() > 0.7) player.runCommand('playsound random.orb @s ~~~ 0.5 1.5');
-        if (newVal >= task.req) {
-            this.completeTask(player, task);
-        } else {
-            this.db.markDirty(player.id);
+
+        if (task.coop) {
+            if (!this.db.globalProgress[taskId]) {
+                this.db.globalProgress[taskId] = task.objectives ? task.objectives.map(() => 0) : 0;
+            }
+            if (task.objectives && task.objectives.length > 0) {
+                if (!Array.isArray(this.db.globalProgress[taskId])) {
+                    this.db.globalProgress[taskId] = task.objectives.map(() => 0);
+                }
+                let updated = false;
+                task.objectives.forEach((obj, idx) => {
+                    if (obj.type === targetType && obj.target === targetId) {
+                        const cur = this.db.globalProgress[taskId][idx] || 0;
+                        if (cur < obj.req) {
+                            this.db.globalProgress[taskId][idx] = Math.min(obj.req, cur + amount);
+                            updated = true;
+                        }
+                    }
+                });
+                if (updated) {
+                    this.db.saveGlobalProgress();
+                    const allDone = task.objectives.every((obj, idx) => (this.db.globalProgress[taskId][idx] || 0) >= obj.req);
+                    if (allDone) {
+                        this.completeCoopTask(task);
+                    }
+                }
+            } else {
+                const cur = this.db.globalProgress[taskId] || 0;
+                if (cur < task.req) {
+                    this.db.globalProgress[taskId] = Math.min(task.req, cur + amount);
+                    this.db.saveGlobalProgress();
+                    if (this.db.globalProgress[taskId] >= task.req) {
+                        this.completeCoopTask(task);
+                    }
+                }
+            }
+            return;
         }
+
+        if (task.objectives && task.objectives.length > 0) {
+            if (!Array.isArray(data.progress[taskId])) {
+                data.progress[taskId] = task.objectives.map(() => 0);
+            }
+            let updated = false;
+            task.objectives.forEach((obj, idx) => {
+                if (obj.type === targetType && obj.target === targetId) {
+                    const cur = data.progress[taskId][idx] || 0;
+                    if (cur < obj.req) {
+                        data.progress[taskId][idx] = Math.min(obj.req, cur + amount);
+                        updated = true;
+                    }
+                }
+            });
+            if (updated) {
+                this.db.markDirty(player.id);
+                const allDone = task.objectives.every((obj, idx) => (data.progress[taskId][idx] || 0) >= obj.req);
+                if (allDone) {
+                    this.completeTask(player, task);
+                }
+            }
+        } else {
+            const current = data.progress[taskId] || 0;
+            const newVal = Math.min(task.req, current + amount);
+            data.progress[taskId] = newVal;
+            if (newVal >= task.req) {
+                this.completeTask(player, task);
+            } else {
+                this.db.markDirty(player.id);
+            }
+        }
+    }
+    completeCoopTask(task) {
+        if (this.db.globalCompleted.includes(task.id)) return;
+        this.db.globalCompleted.push(task.id);
+        this.db.saveGlobalCompleted();
+        world.getAllPlayers().forEach(player => {
+            const data = this.db.getPlayer(player.id);
+            if (!data.completed.includes(task.id)) {
+                data.completed.push(task.id);
+                const rewards = task.rewards || {};
+                const pts = rewards.points || task.points || CONFIG.DEFAULT_QUEST_POINTS;
+                data.points += pts;
+                data.stats.pointsEarned += pts;
+                data.stats.tasksCompleted++;
+                if (data.tracked === task.id) data.tracked = null;
+                if (data.activeQuests) {
+                    const idx = data.activeQuests.indexOf(task.id);
+                    if (idx !== -1) data.activeQuests.splice(idx, 1);
+                }
+                this.db.savePlayer(player.id);
+            }
+            player.runCommand('playsound random.levelup @s');
+            player.sendMessage(`\n§3=============================`);
+            player.sendMessage(`§b§l CO-OP QUEST COMPLETED: §f${task.name}`);
+            player.sendMessage(`§7 Shared server progress complete!`);
+            player.sendMessage(`§d Points Earned: §f+${task.points || 0}`);
+            player.sendMessage(`§3=============================\n`);
+        });
     }
     completeTask(player, task) {
         const data = this.db.getPlayer(player.id);
@@ -301,6 +486,10 @@ export class QuestManager {
         data.points += pts;
         data.stats.pointsEarned += pts;
         if (data.tracked === task.id) data.tracked = null;
+        if (data.activeQuests) {
+            const idx = data.activeQuests.indexOf(task.id);
+            if (idx !== -1) data.activeQuests.splice(idx, 1);
+        }
         if (task.repeatable) {
             const cd = (task.cooldownSec || CONFIG.DEFAULT_COOLDOWN) * 1000;
             data.repeatCooldowns[task.id] = Date.now() + cd;
@@ -309,45 +498,57 @@ export class QuestManager {
         this.db.savePlayer(player.id);
         player.runCommand(`playsound random.levelup @s`);
         player.runCommand(`title @s actionbar §a§lTask Completed!`);
-        const repeatTag = task.repeatable ? ' §d[Repeatable]' : '';
-        const chainTag = task.chainId ? ` §8[Chain: ${this.db.chains.get(task.chainId)?.name || '?'}]` : '';
-        player.sendMessage(`\n§a=============================`);
-        player.sendMessage(`§e COMPLETED: §f${task.name}${repeatTag}${chainTag}`);
-        player.sendMessage(`§7 ${task.desc}`);
-        player.sendMessage(`§d Points Earned: §f+${pts} §7(Total: ${data.points})`);
-        if (data.streak.currentStreak > 1) {
-            player.sendMessage(`§6 🔥 ${data.streak.currentStreak}-Day Streak!`);
-        }
-        if (task.repeatable) {
-            player.sendMessage(`§7 Repeatable in §f${formatTime(task.cooldownSec || CONFIG.DEFAULT_COOLDOWN)}`);
-        }
-        const rewardCommands = (rewards.commands && rewards.commands.length > 0)
-            ? rewards.commands
-            : (task.rewardCmd ? [task.rewardCmd] : []);
-        if (rewardCommands.length > 0) {
-            player.sendMessage(`§a Rewards: §f${task.rewardTxt || 'Items'}`);
-            rewardCommands.forEach(cmd => {
-                try { player.runCommand(cmd); } catch (e) { }
-            });
-        }
-        if (rewards.pool && rewards.pool.length > 0) {
-            const randomCmd = rewards.pool[Math.floor(Math.random() * rewards.pool.length)];
-            try { player.runCommand(randomCmd); } catch (e) { }
-            player.sendMessage(`§d 🎲 Bonus Reward Drawn!`);
-        }
-        player.sendMessage(`§a=============================\n`);
-        if (pts >= 50) {
+        if (task.bounty) {
+            const creatorPlayer = world.getAllPlayers().find(p => p.id === task.creatorId);
+            if (creatorPlayer) {
+                creatorPlayer.sendMessage(`§6§l[Bounty Board] §aYour bounty "${task.name}" was completed by §e${player.name}§a!`);
+            }
             world.getAllPlayers().forEach(p => {
-                if (p.id !== player.id) {
-                    p.sendMessage(`§6§l[!] §e${player.name} §fcompleted §a${task.name} §f(+${pts}pts)!`);
-                }
+                p.sendMessage(`§6§l[Bounty Board] §e${player.name} §fhas claimed the bounty §a${task.name} §fposted by §e${task.creatorName || 'someone'}!`);
             });
+            this.db.tasks.delete(task.id);
+            this.db.saveTasks();
+        } else {
+            const repeatTag = task.repeatable ? ' §d[Repeatable]' : '';
+            const chainTag = task.chainId ? ` §8[Chain: ${this.db.chains.get(task.chainId)?.name || '?'}]` : '';
+            player.sendMessage(`\n§a=============================`);
+            player.sendMessage(`§e COMPLETED: §f${task.name}${repeatTag}${chainTag}`);
+            player.sendMessage(`§7 ${task.desc}`);
+            player.sendMessage(`§d Points Earned: §f+${pts} §7(Total: ${data.points})`);
+            if (data.streak.currentStreak > 1) {
+                player.sendMessage(`§6 🔥 ${data.streak.currentStreak}-Day Streak!`);
+            }
+            if (task.repeatable) {
+                player.sendMessage(`§7 Repeatable in §f${formatTime(task.cooldownSec || CONFIG.DEFAULT_COOLDOWN)}`);
+            }
+            const rewardCommands = (rewards.commands && rewards.commands.length > 0)
+                ? rewards.commands
+                : (task.rewardCmd ? [task.rewardCmd] : []);
+            if (rewardCommands.length > 0) {
+                player.sendMessage(`§a Rewards: §f${task.rewardTxt || 'Items'}`);
+                rewardCommands.forEach(cmd => {
+                    try { player.runCommand(cmd); } catch (e) { }
+                });
+            }
+            if (rewards.pool && rewards.pool.length > 0) {
+                const randomCmd = rewards.pool[Math.floor(Math.random() * rewards.pool.length)];
+                try { player.runCommand(randomCmd); } catch (e) { }
+                player.sendMessage(`§d 🎲 Bonus Reward Drawn!`);
+            }
+            player.sendMessage(`§a=============================\n`);
+            if (pts >= 50) {
+                world.getAllPlayers().forEach(p => {
+                    if (p.id !== player.id) {
+                        p.sendMessage(`§6§l[!] §e${player.name} §fcompleted §a${task.name} §f(+${pts}pts)!`);
+                    }
+                });
+            }
+            this.chains.checkChainCompletion(player, task.id);
+            this.achievements.checkForStat(player, 'tasksCompleted');
+            this.achievements.checkForStat(player, 'pointsEarned');
+            this.achievements.checkForStat(player, 'repeatsDone');
+            this.achievements.checkForStat(player, 'chainsCompleted');
         }
-        this.chains.checkChainCompletion(player, task.id);
-        this.achievements.checkForStat(player, 'tasksCompleted');
-        this.achievements.checkForStat(player, 'pointsEarned');
-        this.achievements.checkForStat(player, 'repeatsDone');
-        this.achievements.checkForStat(player, 'chainsCompleted');
     }
     isCompleted(player, taskId) {
         const data = this.db.getPlayer(player.id);
