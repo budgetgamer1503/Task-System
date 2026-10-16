@@ -47,7 +47,7 @@
 
     "long_form": {
         "type": "panel",
-        "size": [430, 320],
+        "size": ["92%", "86%"],
         "anchor_from": "center",
         "anchor_to": "center",
         "layer": 2,
@@ -308,7 +308,7 @@
 
     "custom_form": {
         "type": "panel",
-        "size": [430, 320],
+        "size": ["92%", "86%"],
         "anchor_from": "center",
         "anchor_to": "center",
         "layer": 2,
@@ -537,7 +537,7 @@
         "$text_edit_box_placeholder_content_binding_name": "$option_place_holder_text",
         "$text_edit_box_placeholder_content_binding_type": "collection",
         "$text_edit_box_grid_collection_name": "custom_form",
-        "$max_text_edit_length": 100,
+        "$max_text_edit_length": 2000,
         "$text_edit_box_content_binding_type": "collection",
         "$text_edit_box_content_binding_name": "#custom_input_text",
         "$option_binding_name": "#custom_input_text",

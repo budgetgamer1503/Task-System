@@ -1,10 +1,14 @@
 export const CONFIG = {
     ITEM_ID: 'ads:vanilla_quest',
-    VERSION: '3.0',
+    VERSION: '3.5.2',
     DB_KEY_TASKS: 'ts_data_tasks_v30',
     DB_KEY_PLAYERS: 'ts_data_players_v30',
     DB_KEY_SHOP: 'ts_data_shop_v30',
     DB_KEY_CHAINS: 'ts_data_chains_v30',
+    DB_KEY_PARTIES: 'ts_data_parties_v35',
+    DB_KEY_BOUNTIES: 'ts_data_bounties_v35',
+    DB_KEY_SERVER_PROGRESS: 'ts_data_server_progress_v35',
+    DB_KEY_BACKUPS: 'ts_data_backups_v35',
     DB_KEY_TASKS_V25: 'ts_data_tasks_v25',
     DB_KEY_PLAYERS_V25: 'ts_data_players_v25',
     DB_KEY_SHOP_V25: 'ts_data_shop_v25',
@@ -17,6 +21,10 @@ export const CONFIG = {
     ACHIEVEMENT_CHECK_INTERVAL: 60,
     MAX_TASKS: 150,
     MAX_CHAINS: 50,
+    MAX_ACTIVE_QUESTS: 5,
+    MAX_OBJECTIVES: 20,
+    MAX_BACKUPS: 5,
+    BACKUP_CHUNK_SIZE: 24000,
     PROXIMITY: 6,
     DEFAULT_QUEST_POINTS: 10,
     DEFAULT_COOLDOWN: 300,
@@ -43,6 +51,8 @@ export const TYPES = {
     FISH: 'fish',
     USE_ITEM: 'use_item',
     PLACE: 'place',
+    DISTANCE: 'distance',
+    EFFECT: 'effect',
     APPROACH: 'approach'
 };
 export const ACHIEVEMENTS = [

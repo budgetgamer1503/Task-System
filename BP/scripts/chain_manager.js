@@ -5,30 +5,41 @@ export class ChainManager {
     }
     createChain(chainData) {
         const id = chainData.id || `chain_${Date.now().toString(36)}`;
+        const previous = this.db.chains.get(id);
+        if (previous) {
+            previous.quests.forEach(questId => {
+                const task = this.db.tasks.get(questId);
+                if (!task || task.chainId !== id) return;
+                task.chainId = null;
+                task.chainOrder = undefined;
+                if (task.chainPrereq) {
+                    task.prerequisites = (task.prerequisites || []).filter(value => value !== task.chainPrereq);
+                    task.chainPrereq = null;
+                    task.prereq = task.prerequisites[0] || null;
+                }
+            });
+        }
         const chain = {
             id,
             name: chainData.name,
             description: chainData.description || '',
             arc: chainData.arc || 'Side Story',
             quests: chainData.quests || [],
-            completionRewards: chainData.completionRewards || {
-                commands: [],
-                points: 0,
-                message: ''
-            },
+            completionRewards: chainData.completionRewards || { commands: [], points: 0, message: '' },
             icon: chainData.icon || 'textures/items/book_written',
             active: chainData.active !== undefined ? chainData.active : true
         };
         this.db.chains.set(id, chain);
         chain.quests.forEach((questId, index) => {
             const task = this.db.tasks.get(questId);
-            if (task) {
-                task.chainId = id;
-                task.chainOrder = index;
-                if (index > 0) {
-                    task.prereq = chain.quests[index - 1];
-                }
-            }
+            if (!task) return;
+            task.chainId = id;
+            task.chainOrder = index;
+            task.prerequisites = Array.isArray(task.prerequisites) ? task.prerequisites : (task.prereq ? [task.prereq] : []);
+            if (task.chainPrereq) task.prerequisites = task.prerequisites.filter(value => value !== task.chainPrereq);
+            task.chainPrereq = index > 0 ? chain.quests[index - 1] : null;
+            if (task.chainPrereq && !task.prerequisites.includes(task.chainPrereq)) task.prerequisites.push(task.chainPrereq);
+            task.prereq = task.prerequisites[0] || null;
         });
         this.db.saveTasks();
         this.db.saveChains();
@@ -42,6 +53,11 @@ export class ChainManager {
             if (task) {
                 task.chainId = null;
                 task.chainOrder = undefined;
+                if (task.chainPrereq) {
+                    task.prerequisites = (task.prerequisites || []).filter(value => value !== task.chainPrereq);
+                    task.chainPrereq = null;
+                    task.prereq = task.prerequisites[0] || null;
+                }
             }
         });
         this.db.chains.delete(chainId);
