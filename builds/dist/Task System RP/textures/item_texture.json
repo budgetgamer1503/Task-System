@@ -1,9 +1,0 @@
-{
-    "resource_pack_name": "Task System Addon",
-    "texture_name": "atlas.items",
-    "texture_data": {
-        "vanilla_quest": {
-            "textures": "textures/items/vanilla_quest"
-        }
-    }
-}
